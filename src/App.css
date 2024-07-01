@@ -7,3 +7,9 @@ section {
 .navBg {
   background-color: #071952;
 }
+
+.separator {
+  height: 10px;
+  background-color: red;
+  border: none;
+}

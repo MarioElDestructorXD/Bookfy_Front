@@ -1,5 +1,5 @@
 import { Link, Outlet } from "react-router-dom";
-import "../App.css";
+import "../../App.css";
 import { FaSearch, FaUser } from "react-icons/fa";
 import {
   Form,
@@ -9,15 +9,16 @@ import {
   InputGroup,
   FormControl,
   Image,
+  Button,
 } from "react-bootstrap";
-import Logo from "../images/logo.png";
+import Logo from "../../images/logo.png";
 
 const NavBar = () => {
   return (
     <>
       <Navbar expand="lg" variant="dark" className="navBg">
-        <Container fluid>
-          <Navbar.Brand className="ms-2" as={Link} to="/">
+        <Container>
+          <Navbar.Brand className="d-inline-block align-top" as={Link} to="/">
             <Image src={Logo} rounded />
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -25,20 +26,20 @@ const NavBar = () => {
             id="basic-navbar-nav"
             className="justify-content-between"
           >
-            <Form className="d-flex flex-grow-1 mx-lg-3 my-2 my-lg-0">
+            <Form className="mx-auto" style={{ width: "50%" }}>
               <InputGroup>
                 <FormControl
-                  placeholder="Buscar"
-                  aria-label="Buscar"
-                  aria-describedby="basic-addon1"
+                  type="text"
+                  placeholder="Buscar..."
+                  className="mr-sm-2"
                 />
-                <InputGroup.Text id="basic-addon1">
+                <Button variant="light" id="button-addon1">
                   <FaSearch />
-                </InputGroup.Text>
+                </Button>
               </InputGroup>
             </Form>
-            <Nav className="ms-auto" as={Link} to="about">
-              <Nav.Link href="#profile">
+            <Nav className="ml-auto" as={Link} to="about">
+              <Nav.Link as={Link} to={"login"}>
                 <FaUser style={{ marginRight: "5px" }} />
                 Perfil
               </Nav.Link>
@@ -46,7 +47,6 @@ const NavBar = () => {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-
       <section>
         <Outlet></Outlet>
       </section>
