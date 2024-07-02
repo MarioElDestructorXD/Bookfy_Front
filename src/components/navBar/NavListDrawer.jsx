@@ -1,8 +1,14 @@
 import "./NavBar";
-import { List, ListItemText, ListItem, ListItemButton, ListItemIcon } from "@mui/material";
+import {
+  List,
+  ListItemText,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+} from "@mui/material";
 import { Box } from "@mui/system";
 
-export default function NavListDrawer({ navLinks }) {
+export default function NavListDrawer({ navArrayLinks, NavLink, setOpen }) {
   return (
     <Box
       sx={{
@@ -11,9 +17,13 @@ export default function NavListDrawer({ navLinks }) {
     >
       <nav>
         <List>
-          {navLinks.map((item) => (
+          {navArrayLinks.map((item) => (
             <ListItem disablePadding key={item.title}>
-              <ListItemButton component="a" href={item.path}>
+              <ListItemButton
+                component={NavLink}
+                to={item.path}
+                onClick={() => setOpen(false)}
+              >
                 <ListItemIcon>{item.icon}</ListItemIcon>
                 <ListItemText>{item.title}</ListItemText>
               </ListItemButton>
