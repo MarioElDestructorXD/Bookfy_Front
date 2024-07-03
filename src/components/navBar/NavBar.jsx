@@ -10,8 +10,8 @@ import {
 import NavListDrawer from "./NavListDrawer";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Box } from "@mui/system";
-
 import { NavLink } from "react-router-dom";
+
 
 export default function NavBar({ navArrayLinks }) {
   const [open, setOpen] = useState(false);
