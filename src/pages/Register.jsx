@@ -1,6 +1,14 @@
-import { Box, Button, Grid, Link, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  TextField,
+  IconButton,
+  InputAdornment,
+} from "@mui/material";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import Logo from "../assets/images/user.png";
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -8,6 +16,10 @@ export default function Register() {
     error: false,
     message: "",
   });
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const validateEmail = (email) => {
     const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
@@ -30,142 +42,202 @@ export default function Register() {
     }
   };
 
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleClickShowConfirmPassword = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
   return (
     <>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center", // Centra verticalmente
-          justifyContent: "center", // Centra horizontalmente
-        }}
+      <Box
+        display="flex"
+        justifyContent="center" // Ajusta el mínimo para cubrir la pantalla
       >
         <Box
           component="form"
           onSubmit={handleSubmit}
           sx={{
             display: "flex",
-            width: 700,
-            height: 600,
             flexDirection: "column",
             alignItems: "center",
-            justifyContent: "center",
+            padding: 3,
             boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.4)",
+            borderRadius: 2,
+            backgroundColor: "white",
+            maxWidth: 550,
+            width: "100%",
           }}
         >
-          <Grid
-            container
-            rowSpacing={2}
-            direction="row"
-            alignItems="center"
-            justifyContent="center"
+          <Box sx={{ flexGrow: 1, alignItems: "center" }}>
+            <img src={Logo} alt="Logo" style={{ height: "80px" }} />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", sm: "row" },
+              width: "100%",
+              gap: 2,
+            }}
           >
-            <Grid item>
-              <h1>Register</h1>
-            </Grid>
-          </Grid>
-          <Grid
-            container
-            alignItems="center"
-            justifyContent="center"
-            rowSpacing={1}
-            columnSpacing={{ xs: 1, sm: 2, md: 2, xl: 2 }}
+            <TextField
+              id="name"
+              label="Nombre"
+              type="text"
+              variant="outlined"
+              fullWidth
+              required
+            />
+            <TextField
+              id="lastname"
+              label="Apellido Paterno"
+              type="text"
+              variant="outlined"
+              fullWidth
+              required
+            />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", sm: "row" },
+              width: "100%",
+              gap: 2,
+              mt: 2,
+            }}
           >
-            <Grid item xs={10} md={5}>
-              <TextField
-                id="name"
-                label="Nombre"
-                type="text"
-                variant="outlined"
-                fullWidth
-                required
-              />
-            </Grid>
-            <Grid item xs={10} md={5}>
-              <TextField
-                id="lastname"
-                label="Apellido Paterno"
-                type="text"
-                variant="outlined"
-                fullWidth
-                required
-              />
-            </Grid>
-            <Grid item xs={10} md={5}>
-              <TextField
-                id="lastname2"
-                label="Apellido Materno"
-                type="text"
-                variant="outlined"
-                fullWidth
-                required
-              />
-            </Grid>
-            <Grid item xs={10} md={5}>
-              <TextField
-                id="email"
-                label="Correo"
-                type="email"
-                variant="outlined"
-                fullWidth
-                required
-                helperText={error.message}
-                error={error.error}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={10} md={10}>
-              <TextField
-                id="phone"
-                label="Telefono"
-                type="tel"
-                variant="outlined"
-                fullWidth
-                required
-              />
-            </Grid>
-            <Grid item xs={10} md={10}>
-              <TextField
-                id="password"
-                label="Contraseña"
-                type="password"
-                variant="outlined"
-                fullWidth
-                required
-              />
-            </Grid>
-            <Grid item xs={10} md={10}>
-              <TextField
-                id="confirmPassword"
-                label="Confirmar Contraseña"
-                type="password"
-                variant="outlined"
-                fullWidth
-                required
-              />
-            </Grid>
-          </Grid>
-
-          <Grid
-            container
-            columnSpacing={4}
-            direction="column"
-            alignItems="center"
-            justifyContent="center"
+            <TextField
+              id="lastname2"
+              label="Apellido Materno"
+              type="text"
+              variant="outlined"
+              fullWidth
+              required
+            />
+            <TextField
+              id="email"
+              label="Correo"
+              type="email"
+              variant="outlined"
+              fullWidth
+              required
+              helperText={error.message}
+              error={error.error}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", sm: "row" },
+              width: "100%",
+              gap: 2,
+              mt: 2,
+            }}
           >
-            <Grid item xs={5} md={5}>
-              <Button type="submit" variant="outlined" sx={{ mt: 2 }}>
-                Registrame
-              </Button>
-            </Grid>
-            <Grid item>
-              <Typography variant="body2" color="textSecondary" sx={{ mt: 2 }}>
-                ¿Ya tienes cuenta? <Link component={NavLink} to="/login">Iniciar Sesión</Link>
-              </Typography>
-            </Grid>
-          </Grid>
+            <TextField
+              id="phone"
+              label="Teléfono"
+              type="tel"
+              variant="outlined"
+              fullWidth
+              required
+            />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              width: "100%",
+              mt: 2,
+              gap: 2,
+            }}
+          >
+            <TextField
+              id="password"
+              label="Contraseña"
+              type={showPassword ? "text" : "password"}
+              variant="outlined"
+              fullWidth
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    {password && (
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    )}
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <TextField
+              id="confirmPassword"
+              label="Confirmar Contraseña"
+              type={showConfirmPassword ? "text" : "password"}
+              variant="outlined"
+              fullWidth
+              required
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    {confirmPassword && (
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowConfirmPassword}
+                        onMouseDown={handleMouseDownPassword}
+                      >
+                        {showConfirmPassword ? (
+                          <VisibilityOff />
+                        ) : (
+                          <Visibility />
+                        )}
+                      </IconButton>
+                    )}
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Box>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            sx={{ mt: 3 }}
+          >
+            Registrarse
+          </Button>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center", // Centra el enlace
+              width: "100%",
+              mt: 2,
+            }}
+          >
+            <NavLink to="/login" variant="body2">
+              ¿Ya tienes una cuenta? Inicia sesión
+            </NavLink>
+          </Box>
         </Box>
-      </div>
+      </Box>
     </>
   );
 }
+
