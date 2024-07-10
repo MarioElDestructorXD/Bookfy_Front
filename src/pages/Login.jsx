@@ -117,7 +117,7 @@ export default function Login() {
                 textAlign: "center", // Centrado del contenido
               }}
             >
-              <NavLink to="/forgot-password" variant="body2">
+              <NavLink to="/resetPassword" variant="body2">
                 ¿Olvidaste Contraseña?
               </NavLink>
             </Box>

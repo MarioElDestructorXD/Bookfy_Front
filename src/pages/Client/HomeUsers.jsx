@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import Carousel from "../../components/carrusel/Carousel";
 import CardLibro from "../../components/Libros/CardLibro";
 import DetailedCardLibro from "../../components/Libros/DetailedCardLibro";
