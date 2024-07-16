@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import './Carrusel.css'; // Import the CSS file
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Box, Button, Card, CardContent, CardMedia, Typography } from '@mui/material';
