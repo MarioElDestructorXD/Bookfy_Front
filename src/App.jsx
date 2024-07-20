@@ -15,7 +15,8 @@ import ServerError from "./pages/Errors/ServerError";
 import Perfil from "./components/cliente/Perfil"
 import CardPerfil from "./components/cliente/CardPerfil"
 import MiBiblioteca from "./components/cliente/MiBiblioteca"
-
+import TablaLibro from "./components/admin/TablaLibro";
+import TablaUsuario from "./components/admin/TablaUsuario";
 
 const navArrayLinks = [
   {
@@ -60,6 +61,8 @@ export default function App() {
         <Route path="*" element={<NotFound />} />
         <Route  path="/perfil" element={ <Perfil />} />
         <Route  path="/biblioteca" element={ <MiBiblioteca />} />
+        <Route  path="/tablaLibro" element={ <TablaLibro />} />
+        <Route  path="/tablaUsuario" element={ <TablaUsuario />} />
       </Routes>
       </Container>
     </>
