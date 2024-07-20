@@ -1,7 +1,8 @@
-import  { useState } from 'react';
-import './Carrusel.css'; // Import the CSS file
+import React, { useState } from 'react';
+import './Carrusel.css';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Box, Button, Card, CardContent, CardMedia, Typography } from '@mui/material';
+import libros from '../Libros/ListLibro'; 
 
 const theme = createTheme({
   palette: {
@@ -14,40 +15,16 @@ const theme = createTheme({
   },
 });
 
-const imagenes = [
-  { 
-    src: 'https://picsum.photos/800/300?image=1005', 
-    alt: 'Imagen 1',
-    title: 'Título del libro 1',
-    category: 'Categoría 1',
-    description: 'Esta es una breve sinopsis del libro 1.'
-  },
-  { 
-    src: 'https://picsum.photos/800/300?image=1006', 
-    alt: 'Imagen 2',
-    title: 'Título del libro 2',
-    category: 'Categoría 2',
-    description: 'Esta es una breve sinopsis del libro 2.'
-  },
-  { 
-    src: 'https://picsum.photos/800/300?image=1008', 
-    alt: 'Imagen 3',
-    title: 'Título del libro 3',
-    category: 'Categoría 3',
-    description: 'Esta es una breve sinopsis del libro 3.'
-  },
-];
-
-const Carousel = () => {
+const Carousel = ({ onLeerClick }) => {
   const [indiceActual, setIndiceActual] = useState(0);
 
   const siguienteImagen = () => {
-    const nuevoIndice = (indiceActual + 1) % imagenes.length;
+    const nuevoIndice = (indiceActual + 1) % libros.length;
     setIndiceActual(nuevoIndice);
   };
 
   const anteriorImagen = () => {
-    const nuevoIndice = (indiceActual - 1 + imagenes.length) % imagenes.length;
+    const nuevoIndice = (indiceActual - 1 + libros.length) % libros.length;
     setIndiceActual(nuevoIndice);
   };
 
@@ -57,21 +34,21 @@ const Carousel = () => {
         <Card className="carousel">
           <CardMedia
             component="img"
-            image={imagenes[indiceActual].src}
-            title={imagenes[indiceActual].alt}
+            image={libros[indiceActual].src}
+            title={libros[indiceActual].alt}
             className="carousel-image"
           />
           <CardContent className="carousel-content">
             <Typography variant="h5" component="h2" className="carousel-title">
-              {imagenes[indiceActual].title}
+              {libros[indiceActual].title}
             </Typography>
             <Typography variant="subtitle1" component="h3" className="carousel-category">
-              {imagenes[indiceActual].category}
+              {libros[indiceActual].category}
             </Typography>
             <Typography variant="body2" className="carousel-description">
-              {imagenes[indiceActual].description}
+              {libros[indiceActual].description}
             </Typography>
-            <Button variant="contained">
+            <Button variant="contained" onClick={() => onLeerClick(libros[indiceActual])}>
               Más Info
             </Button>
           </CardContent>

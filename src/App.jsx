@@ -2,6 +2,7 @@ import { Container } from "@mui/material";
 import NavBar from "./components/navBar/NavBar";
 import { Route, Routes } from "react-router-dom";
 import HomeUser from "./pages/Client/HomeUsers";
+import Reading from "./pages/Client/Reading";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -45,8 +46,9 @@ export default function App() {
       <NavBar navArrayLinks={navArrayLinks} navBarArrayLinks={navBarArrayLinks} navBarArrayLinksItems={navBarArrayLinksItems}/>
       <Container sx={{ mt: 5}}>
       <Routes>
-        <Route exact path="/" element={ <Home />} />
+        <Route exact path="/" element={ <HomeUser />} />
         <Route  path="/user" element={ <HomeUser />} />
+        <Route  path="/reading" element={ <Reading />} />
         <Route  path="/resetPassword" element={ <ResetPassword />} />
         <Route  path="/updatePassword" element={ <UpdatePassword />} />
         <Route  path="/login" element={ <Login />} />

@@ -15,7 +15,7 @@ import NavListDrawer from "./NavListDrawer";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import { Box } from "@mui/system";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
 export default function NavBar({
@@ -24,6 +24,13 @@ export default function NavBar({
   navBarArrayLinksItems,
 }) {
   const [open, setOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    navigate(`/search?q=${searchQuery}`);
+  };
 
   return (
     <>
@@ -64,35 +71,38 @@ export default function NavBar({
                 </Button>
               ))}
             </Box>
-            <TextField
-              variant="standard"
-              placeholder="Buscar por autor, título, género ..."
-              size="small"
-              fullWidth
-              sx={{
-                color: "white",
-                marginRight: 2, // Color del texto blanco
-                backgroundColor: "transparent", // Fondo transparente
-                borderBottom: "1px solid white", // Borde inferior blanco
-                display: { xs: "none", sm: "flex" }, // Mostrar en pantallas sm y superiores
-              }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon style={{ color: "white" }} />{" "}
-                    {/* Ícono de búsqueda blanco */}
-                  </InputAdornment>
-                ),
-                style: { color: "white" }, // Color del texto blanco dentro del input
-              }}
-            />
+            <form onSubmit={handleSearchSubmit} style={{ display: 'flex', flexGrow: 1 }}>
+              <TextField
+                variant="standard"
+                placeholder="Buscar por autor, título, género ..."
+                size="small"
+                fullWidth
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                sx={{
+                  color: "white",
+                  marginRight: 2,
+                  backgroundColor: "transparent",
+                  borderBottom: "1px solid white",
+                  display: { xs: "none", sm: "flex" },
+                }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon style={{ color: "white" }} />
+                    </InputAdornment>
+                  ),
+                  style: { color: "white" },
+                }}
+              />
+            </form>
           </Box>
           <Box
             sx={{
               display: { xs: "none", sm: "flex" },
               flexDirection: "row",
-              justifyContent: "center", 
-              alignItems: "center", 
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
             {navBarArrayLinksItems.map((itemBar) => (
@@ -100,13 +110,13 @@ export default function NavBar({
                 key={itemBar.title}
                 to={itemBar.path}
                 style={({ isActive }) => ({
-                  marginRight: "16px", // mr: 2 en Material-UI
+                  marginRight: "16px",
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-                  textDecoration: "none", // Elimina el subrayado predeterminado del enlace
-                  borderBottom: isActive ? "4px solid" : "none", // Añade una línea debajo del texto cuando el enlace está activo
-                  color: "inherit", // Mantiene el color del texto
+                  textDecoration: "none",
+                  borderBottom: isActive ? "4px solid" : "none",
+                  color: "inherit",
                 })}
               >
                 <Typography
@@ -177,8 +187,9 @@ export default function NavBar({
     </>
   );
 }
+
 NavBar.propTypes = {
   navArrayLinks: PropTypes.array.isRequired,
   navBarArrayLinks: PropTypes.array.isRequired,
-  navBarArrayLinksItems: PropTypes.array.isRequireds,
+  navBarArrayLinksItems: PropTypes.array.isRequired,
 };
