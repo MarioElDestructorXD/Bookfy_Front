@@ -42,6 +42,11 @@ const navBarArrayLinksItems = [
     path: "/",
     img: <HomeIcon />
   },
+  {
+    title: "About",
+    path: "/",
+    img: <HomeIcon />
+  },
 ];
 
 
