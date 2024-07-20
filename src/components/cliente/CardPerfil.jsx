@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { TextField, Button, Grid, Paper, Typography } from '@mui/material';
 
 const CardPerfil = () => {

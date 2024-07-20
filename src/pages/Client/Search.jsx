@@ -1,47 +1,46 @@
-import React, { useState } from 'react';
-import NavbarBusqueda from './../../components/navBar/NavbarBusqueda';
+import { useState } from "react";
+import NavbarBusqueda from "./../../components/navBar/NavbarBusqueda";
 import CardLibro from "../../components/Libros/CardLibro";
 import DetailedCardLibro from "../../components/Libros/DetailedCardLibro";
-import libros from '../../components/Libros/ListLibro';
-import Pagination from '@mui/material/Pagination';
-import Modal from '@mui/material/Modal';
-import Box from '@mui/material/Box';
+import libros from "../../components/Libros/ListLibro";
+import Pagination from "@mui/material/Pagination";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
 import { useLocation } from "react-router-dom";
-import ViewListIcon from '@mui/icons-material/ViewList';
-import ViewModuleIcon from '@mui/icons-material/ViewModule';
-import IconButton from '@mui/material/IconButton';
-import 
+import ViewListIcon from "@mui/icons-material/ViewList";
+import ViewModuleIcon from "@mui/icons-material/ViewModule";
+import IconButton from "@mui/material/IconButton";
 
 const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: '80%',
-  bgcolor: 'background.paper',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "80%",
+  bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
-  maxHeight: '90vh',
-  overflowY: 'auto',
+  maxHeight: "90vh",
+  overflowY: "auto",
 };
 
 export default function Search() {
   const [pageNumber, setPageNumber] = useState(1);
   const [selectedLibro, setSelectedLibro] = useState(null);
-  const [searchType, setSearchType] = useState('title'); 
-  const [view, setView] = useState('grid'); // Estado para la vista
+  const [searchType, setSearchType] = useState("title");
+  const [view, setView] = useState("grid"); // Estado para la vista
   const librosPorPagina = 3;
 
   const location = useLocation();
   const searchQuery = new URLSearchParams(location.search).get("q") || "";
 
-  const filteredLibros = libros.filter(libro => {
-    if (searchType === 'title') {
+  const filteredLibros = libros.filter((libro) => {
+    if (searchType === "title") {
       return libro.title.toLowerCase().includes(searchQuery.toLowerCase());
-    } else if (searchType === 'category') {
+    } else if (searchType === "category") {
       return libro.category.toLowerCase().includes(searchQuery.toLowerCase());
     }
-    return false; 
+    return false;
   });
 
   const pageCount = Math.ceil(filteredLibros.length / librosPorPagina);
@@ -65,9 +64,9 @@ export default function Search() {
 
   const handleChangeTab = (event, newValue) => {
     if (newValue === 0) {
-      setSearchType('title');
+      setSearchType("title");
     } else if (newValue === 1) {
-      setSearchType('category');
+      setSearchType("category");
     }
     setPageNumber(1);
   };
@@ -78,32 +77,55 @@ export default function Search() {
 
   return (
     <>
-      <NavbarBusqueda value={searchType === 'title' ? 0 : 1} onChange={handleChangeTab} />
-      
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '20px' }}>
-        <IconButton onClick={() => handleChangeView('list')}>
-          <ViewListIcon color={view === 'list' ? 'primary' : 'default'} />
+      <NavbarBusqueda
+        value={searchType === "title" ? 0 : 1}
+        onChange={handleChangeTab}
+      />
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          marginBottom: "20px",
+        }}
+      >
+        <IconButton onClick={() => handleChangeView("list")}>
+          <ViewListIcon color={view === "list" ? "primary" : "default"} />
         </IconButton>
-        <IconButton onClick={() => handleChangeView('grid')}>
-          <ViewModuleIcon color={view === 'grid' ? 'primary' : 'default'} />
+        <IconButton onClick={() => handleChangeView("grid")}>
+          <ViewModuleIcon color={view === "grid" ? "primary" : "default"} />
         </IconButton>
       </div>
-      
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexWrap: view === 'grid' ? 'wrap' : 'nowrap', flexDirection: view === 'list' ? 'column' : 'row' }}>
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexWrap: view === "grid" ? "wrap" : "nowrap",
+          flexDirection: view === "list" ? "column" : "row",
+        }}
+      >
         {librosMostrados.map((libro, index) => (
           <CardLibro
             key={index}
-            image={libro.src} 
+            image={libro.src}
             title={libro.title}
             categories={libro.category}
             description={libro.description}
             onClick={() => handleLeerClick(libro)}
-            style={{ margin: view === 'grid' ? '10px' : '0', width: view === 'grid' ? '30%' : '100%' }}
+            style={{
+              margin: view === "grid" ? "10px" : "0",
+              width: view === "grid" ? "30%" : "100%",
+            }}
           />
         ))}
       </div>
-      
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+
+      <div
+        style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}
+      >
         <Pagination
           count={pageCount}
           page={pageNumber}
@@ -122,7 +144,7 @@ export default function Search() {
         <Box sx={style}>
           {selectedLibro && (
             <DetailedCardLibro
-              image={selectedLibro.src} 
+              image={selectedLibro.src}
               title={selectedLibro.title}
               categories={selectedLibro.category}
               description={selectedLibro.description}

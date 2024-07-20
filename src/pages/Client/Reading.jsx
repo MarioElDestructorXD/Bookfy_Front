@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Document, Page } from 'react-pdf';
-import { pdfjs } from 'react-pdf';
+import { useState } from 'react';
+import { Document, Page, pdfjs } from 'react-pdf';
+import {  } from 'react-pdf';
 import libros from '../../components/Libros/ListLibro';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
@@ -43,7 +43,7 @@ const Reading = () => {
       <div className="pdf-container">
         <Document
           file={selectedBook.pdfUrl}
-          onLoadSuccess={({ numPages }) => setPageNumber(1)}
+          onLoadSuccess={({ pageNumber }) => setPageNumber(1)}
         >
           <Page pageNumber={pageNumber} scale={scale} />
         </Document>

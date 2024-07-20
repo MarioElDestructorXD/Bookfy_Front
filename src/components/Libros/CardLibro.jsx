@@ -1,30 +1,27 @@
-import React from 'react';
-import './CardLibro.css';
-import { Button } from '@mui/material';
-import { useHistory } from 'react-router-dom';
+import "./CardLibro.css";
+import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
-const CardLibro = ({ image, title, categories, description, pdfUrl }) => {
-    const history = useHistory();
+export default function CardLibro({ image, title, categories, description }) {
+  const navigate = useNavigate();
 
-    const handleClickLeer = () => {
-        history.push('/reading');
-    };
-
-    return (
-        <div className="book-card">
-            <img src={image} alt={title} />
-            <div className="book-card-content">
-                <div className="book-card-title">{title}</div>
-                <div className="book-card-categories">{categories}</div>
-                <div className="book-card-description">{description}</div>
-                <div className="book-card-button">
-                    <Button variant="contained" color="primary" onClick={handleClickLeer}>
-                        Leer
-                    </Button>
-                </div>
-            </div>
+  const handleClickLeer = () => {
+    navigate("/reading");
+  };
+  
+  return (
+    <div className="book-card">
+      <img src={image} alt={title} />
+      <div className="book-card-content">
+        <div className="book-card-title">{title}</div>
+        <div className="book-card-categories">{categories}</div>
+        <div className="book-card-description">{description}</div>
+        <div className="book-card-button">
+          <Button variant="contained" color="primary" onClick={handleClickLeer}>
+            Leer
+          </Button>
         </div>
-    );
-};
-
-export default CardLibro;
+      </div>
+    </div>
+  );
+}

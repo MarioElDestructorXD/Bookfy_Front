@@ -13,7 +13,6 @@ import HomeIcon from '@mui/icons-material/Home'
 import NotFound from "./pages/Errors/NotFound";
 import ServerError from "./pages/Errors/ServerError";
 import Perfil from "./components/cliente/Perfil"
-import CardPerfil from "./components/cliente/CardPerfil"
 import MiBiblioteca from "./components/cliente/MiBiblioteca"
 import TablaLibro from "./components/admin/TablaLibro";
 import TablaUsuario from "./components/admin/TablaUsuario";
@@ -56,7 +55,7 @@ export default function App() {
       <NavBar navArrayLinks={navArrayLinks} navBarArrayLinks={navBarArrayLinks} navBarArrayLinksItems={navBarArrayLinksItems}/>
       <Container sx={{ mt: 5}}>
       <Routes>
-        <Route exact path="/" element={ <HomeUser />} />
+        <Route exact path="/" element={ <Home />} />
         <Route  path="/user" element={ <HomeUser />} />
         <Route  path="/reading" element={ <Reading />} />
         <Route  path="/resetPassword" element={ <ResetPassword />} />

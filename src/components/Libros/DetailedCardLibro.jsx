@@ -1,4 +1,3 @@
-import React from 'react';
 import './DetailedCardLibro.css';
 import { Button, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';

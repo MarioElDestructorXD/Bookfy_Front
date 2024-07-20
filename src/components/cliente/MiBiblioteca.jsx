@@ -1,4 +1,3 @@
-import React from 'react';
 import { Container, Grid, Card, CardMedia, CardContent, CardActions, Typography, Button, AppBar, Toolbar } from '@mui/material';
 
 const books = [
