@@ -17,7 +17,6 @@ import CardPerfil from "./components/cliente/CardPerfil"
 import MiBiblioteca from "./components/cliente/MiBiblioteca"
 
 
-
 const navArrayLinks = [
   {
     title: "Login",
