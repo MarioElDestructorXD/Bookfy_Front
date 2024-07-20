@@ -12,6 +12,10 @@ import UserIcon from '@mui/icons-material/AccountCircle'
 import HomeIcon from '@mui/icons-material/Home'
 import NotFound from "./pages/Errors/NotFound";
 import ServerError from "./pages/Errors/ServerError";
+import Perfil from "./components/cliente/Perfil"
+import CardPerfil from "./components/cliente/CardPerfil"
+import MiBiblioteca from "./components/cliente/MiBiblioteca"
+
 
 
 const navArrayLinks = [
@@ -55,6 +59,8 @@ export default function App() {
         <Route  path="/register" element={ <Register />} />
         <Route path="/500" element={<ServerError />} /> {/* Ruta para el error 500 */}
         <Route path="*" element={<NotFound />} />
+        <Route  path="/perfil" element={ <Perfil />} />
+        <Route  path="/biblioteca" element={ <MiBiblioteca />} />
       </Routes>
       </Container>
     </>
