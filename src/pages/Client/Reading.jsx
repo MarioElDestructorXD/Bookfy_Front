@@ -4,7 +4,6 @@ import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 
 import libros from '../../pages/Books/ListLibro';
-import './Reading.css';
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 const Reading = () => {
@@ -26,20 +25,20 @@ const Reading = () => {
   };
 
   return (
-    <div className="reading-container">
-      <div className="navbar">
-        <div className="navbar-title">Bookfy</div>
-        <div className="navbar-menu">
-          <select onChange={handleBookChange}>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', padding: '10px', backgroundColor: '#f8d7da' }}>
+        <div style={{ fontSize: '24px', fontWeight: 'bold' }}>Bookfy</div>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <select onChange={handleBookChange} style={{ marginRight: '10px', padding: '5px', fontSize: '16px' }}>
             {libros.map((book, index) => (
               <option value={index} key={index}>{book.title}</option>
             ))}
           </select>
-          <button onClick={zoomIn}>A+</button>
-          <button onClick={zoomOut}>A-</button>
+          <button onClick={zoomIn} style={{ margin: '0 5px', padding: '5px 10px', fontSize: '18px', cursor: 'pointer' }}>A+</button>
+          <button onClick={zoomOut} style={{ margin: '0 5px', padding: '5px 10px', fontSize: '18px', cursor: 'pointer' }}>A-</button>
         </div>
       </div>
-      <div className="pdf-container">
+      <div style={{ width: '80%', height: '80vh', overflow: 'auto', border: '1px solid #ddd', marginTop: '20px', padding: '10px' }}>
         <Document
           file={selectedBook.pdfUrl}
           onLoadSuccess={({ pageNumber }) => setPageNumber(1)}
