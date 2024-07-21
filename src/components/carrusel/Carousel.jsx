@@ -8,7 +8,7 @@ import {
   CardMedia,
   Typography,
 } from "@mui/material";
-import libros from "../Libros/ListLibro";
+import libros from "../../pages/Books/ListLibro";
 
 const Carousel = ({ onLeerClick }) => {
   const [indiceActual, setIndiceActual] = useState(0);

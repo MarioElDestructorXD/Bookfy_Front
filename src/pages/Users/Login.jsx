@@ -1,32 +1,36 @@
+// src/pages/Login.jsx
 import { useState } from "react";
 import {
-  Button,
   CssBaseline,
+  Button,
   TextField,
   Box,
   Container,
   IconButton,
   InputAdornment,
 } from "@mui/material";
-import Logo from "../assets/images/user.png";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+
+import { useAuth } from "../../AuthContext";
+import Logo from "../../assets/images/user.png";
 
 export default function Login() {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
-
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
+    if (login(email, password)) {
+      // Redirige a la página principal o a la página adecuada según el rol del usuario
+      navigate("/user"); // Puedes cambiar esto a la página adecuada según tu lógica
+    } else {
+      // Muestra un mensaje de error si el inicio de sesión falla
+      alert("Correo o contraseña incorrectos");
+    }
   };
 
   const handleClickShowPassword = () => {
@@ -43,7 +47,7 @@ export default function Login() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        marginTop: "8px", // Margen superior
+        marginTop: "8px",
       }}
     >
       <Container maxWidth="xs">
@@ -73,7 +77,8 @@ export default function Login() {
               name="email"
               autoComplete="email"
               autoFocus
-              sx={{ mb: 2 }} // Espaciado inferior
+              onChange={(e) => setEmail(e.target.value)}
+              sx={{ mb: 2 }}
             />
             <TextField
               variant="outlined"
@@ -86,7 +91,7 @@ export default function Login() {
               id="password"
               autoComplete="current-password"
               value={password}
-              onChange={handlePasswordChange}
+              onChange={(e) => setPassword(e.target.value)}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -100,21 +105,21 @@ export default function Login() {
                   </InputAdornment>
                 ),
               }}
-              sx={{ mb: 3 }} // Espaciado inferior
+              sx={{ mb: 3 }}
             />
             <Button
               type="submit"
               fullWidth
               variant="contained"
               color="primary"
-              sx={{ mt: 2 }} // Margen superior
+              sx={{ mt: 2 }}
             >
               Iniciar Sesión
             </Button>
             <Box
               sx={{
-                mt: 2, // Margen superior
-                textAlign: "center", // Centrado del contenido
+                mt: 2,
+                textAlign: "center",
               }}
             >
               <NavLink to="/resetPassword" variant="body2">
@@ -123,8 +128,8 @@ export default function Login() {
             </Box>
             <Box
               sx={{
-                mt: 1, // Margen superior adicional
-                textAlign: "center", // Centrado del contenido
+                mt: 1,
+                textAlign: "center",
               }}
             >
               <NavLink to="/register" variant="body2">

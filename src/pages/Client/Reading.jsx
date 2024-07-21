@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
-import {  } from 'react-pdf';
-import libros from '../../components/Libros/ListLibro';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
-import './Reading.css';
 
+import libros from '../../pages/Books/ListLibro';
+import './Reading.css';
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 const Reading = () => {

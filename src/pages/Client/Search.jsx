@@ -1,15 +1,13 @@
 import { useState } from "react";
-import NavbarBusqueda from "./../../components/navBar/NavbarBusqueda";
-import CardLibro from "../../components/Libros/CardLibro";
-import DetailedCardLibro from "../../components/Libros/DetailedCardLibro";
-import libros from "../../components/Libros/ListLibro";
-import Pagination from "@mui/material/Pagination";
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
-import { useLocation } from "react-router-dom";
-import ViewListIcon from "@mui/icons-material/ViewList";
-import ViewModuleIcon from "@mui/icons-material/ViewModule";
+import { Box, Modal, Pagination } from "@mui/material";
+import { ViewModuleIcon, ViewListIcon } from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";
+
+import NavbarBusqueda from "./../../components/navBar/NavbarBusqueda";
+import CardLibro from "../../pages/Books/CardLibro";
+import DetailedCardLibro from "../../pages/Books/DetailedCardLibro";
+import libros from "../../pages/Books/ListLibro";
+
 
 const style = {
   position: "absolute",
@@ -31,7 +29,6 @@ export default function Search() {
   const [view, setView] = useState("grid"); // Estado para la vista
   const librosPorPagina = 3;
 
-  const location = useLocation();
   const searchQuery = new URLSearchParams(location.search).get("q") || "";
 
   const filteredLibros = libros.filter((libro) => {

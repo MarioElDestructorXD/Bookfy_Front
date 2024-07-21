@@ -7,7 +7,8 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import Error500 from "../../assets/images/Error500.png"; // Asegúrate de tener la imagen correcta
+
+import Error500 from "../../assets/images/Error500.png";
 
 export default function ServerError() {
   const theme = useTheme();

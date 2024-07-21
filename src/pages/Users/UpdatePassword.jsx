@@ -1,7 +1,7 @@
 import { useState } from "react";
 import {
-  Button,
   CssBaseline,
+  Button,
   TextField,
   Box,
   Container,
@@ -14,8 +14,9 @@ import {
   Visibility,
   VisibilityOff,
 } from "@mui/icons-material";
-import CheckIcon from "../assets/images/verify.gif"
 import { useNavigate } from "react-router-dom";
+import CheckIcon from "../../assets/images/verify.gif"
+
 
 export default function UpdatePassword() {
   const [passwords, setPasswords] = useState({

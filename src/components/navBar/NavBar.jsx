@@ -10,13 +10,14 @@ import {
   CardContent,
   TextField,
   InputAdornment,
+  Box,
 } from "@mui/material";
-import NavListDrawer from "./NavListDrawer";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
-import { Box } from "@mui/system";
 import { NavLink, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
+
+import NavListDrawer from "./NavListDrawer";
 
 export default function NavBar({
   navArrayLinks,
@@ -24,7 +25,7 @@ export default function NavBar({
   navBarArrayLinksItems,
 }) {
   const [open, setOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
   const handleSearchSubmit = (e) => {
@@ -71,7 +72,41 @@ export default function NavBar({
                 </Button>
               ))}
             </Box>
-            <form onSubmit={handleSearchSubmit} style={{ display: 'flex', flexGrow: 1 }}>
+            <Box
+              sx={{
+                display: { xs: "none", sm: "flex" },
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              {navBarArrayLinksItems.map((itemBar) => (
+                <NavLink
+                  key={itemBar.title}
+                  to={itemBar.path}
+                  style={({ isActive }) => ({
+                    marginRight: "16px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    textDecoration: "none",
+                    borderBottom: isActive ? "4px solid" : "none",
+                    color: "inherit",
+                  })}
+                >
+                  <Typography
+                    variant="h7"
+                    sx={{ cursor: "pointer", textAlign: "center" }}
+                  >
+                    {itemBar.title}
+                  </Typography>
+                </NavLink>
+              ))}
+            </Box>
+            <form
+              onSubmit={handleSearchSubmit}
+              style={{ display: "flex", flexGrow: 1 }}
+            >
               <TextField
                 variant="standard"
                 placeholder="Buscar por autor, título, género ..."
@@ -96,37 +131,6 @@ export default function NavBar({
                 }}
               />
             </form>
-          </Box>
-          <Box
-            sx={{
-              display: { xs: "none", sm: "flex" },
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            {navBarArrayLinksItems.map((itemBar) => (
-              <NavLink
-                key={itemBar.title}
-                to={itemBar.path}
-                style={({ isActive }) => ({
-                  marginRight: "16px",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  textDecoration: "none",
-                  borderBottom: isActive ? "4px solid" : "none",
-                  color: "inherit",
-                })}
-              >
-                <Typography
-                  variant="h7"
-                  sx={{ cursor: "pointer", textAlign: "center" }}
-                >
-                  {itemBar.title}
-                </Typography>
-              </NavLink>
-            ))}
           </Box>
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
             {navArrayLinks.map((item) => (

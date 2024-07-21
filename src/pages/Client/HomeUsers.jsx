@@ -1,11 +1,12 @@
 import  { useState } from 'react';
-import Carousel from "../../components/carrusel/Carousel";
-import CardLibro from "../../components/Libros/CardLibro";
-import DetailedCardLibro from "../../components/Libros/DetailedCardLibro";
-import libros from '../../components/Libros/ListLibro';
 import Pagination from '@mui/material/Pagination';
-import Modal from '@mui/material/Modal';
-import Box from '@mui/material/Box';
+import {Box, Modal} from '@mui/material';
+
+import Carousel from "../../components/carrusel/Carousel";
+import CardLibro from "../../pages/Books/CardLibro";
+import DetailedCardLibro from "../../pages/Books/DetailedCardLibro";
+import libros from '../../pages/Books/ListLibro';
+
 
 const style = {
   position: 'absolute',

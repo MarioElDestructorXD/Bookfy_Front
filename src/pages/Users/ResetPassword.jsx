@@ -1,7 +1,7 @@
 import { useState } from "react";
 import {
-  Button,
   CssBaseline,
+  Button,
   TextField,
   Box,
   Container,
@@ -10,11 +10,11 @@ import {
   Box as MuiBox,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import CheckIcon from "../assets/images/verify.gif";
+import Swal from "sweetalert2";
 
 export default function ResetPassword() {
   const [email, setEmail] = useState("");
-  const [openModal, setOpenModal] = useState(false);
+  const [ , setOpenModal] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = (event) => {
@@ -22,16 +22,19 @@ export default function ResetPassword() {
     console.log({
       email: email,
     });
-    setOpenModal(true); // Abre el modal al enviar el formulario
+    Swal.fire({
+      position: "center",
+      icon: "success",
+      title: "Correo Enviado",
+      showConfirmButton: false,
+      timer: 1500,
+    }).then(() => {
+      window.location.href = '/';
+    });
   };
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
-  };
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
-    navigate("/", { replace: true }); // Redirige a la página principal
   };
 
   return (
@@ -85,55 +88,6 @@ export default function ResetPassword() {
             </Button>
           </form>
         </Box>
-        <Modal
-          open={openModal}
-          onClose={handleCloseModal}
-          aria-labelledby="modal-title"
-          aria-describedby="modal-description"
-        >
-          <MuiBox
-            sx={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              width: 600,
-              bgcolor: "background.paper",
-              borderRadius: "10px",
-              boxShadow: 24,
-              p: 4,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              textAlign: "center",
-            }}
-          >
-            <img
-              src={CheckIcon}
-              alt="Checkmark"
-              style={{ width: "100px", height: "100px" }}
-            />
-            <Typography
-              id="modal-title"
-              variant="h6"
-              component="h2"
-              sx={{ mt: 2 }}
-            >
-              Solicitud Enviada
-            </Typography>
-            <Typography id="modal-description" sx={{ mt: 2 }}>
-              Se ha enviado un correo de recuperación de contraseña a su
-              dirección de correo electrónico.
-            </Typography>
-            <Button
-              onClick={handleCloseModal}
-              variant="contained"
-              sx={{ mt: 2 }}
-            >
-              Cerrar
-            </Button>
-          </MuiBox>
-        </Modal>
       </Container>
     </Box>
   );
