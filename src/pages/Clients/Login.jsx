@@ -22,13 +22,12 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    if (login(email, password)) {
-      // Redirige a la página principal o a la página adecuada según el rol del usuario
-      navigate("/user"); // Puedes cambiar esto a la página adecuada según tu lógica
+    const loginSuccessful = await login(email, password);
+    if (loginSuccessful) {
+      navigate("/user"); // Cambia esto según tu lógica
     } else {
-      // Muestra un mensaje de error si el inicio de sesión falla
       alert("Correo o contraseña incorrectos");
     }
   };

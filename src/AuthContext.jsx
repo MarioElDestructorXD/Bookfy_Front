@@ -1,43 +1,41 @@
-// src/context/AuthContext.js
-import { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 
 const AuthContext = createContext();
 
+export const useAuth = () => useContext(AuthContext);
+
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null);
-  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const register = (user) => {
-    setUsers([...users, user]);
-  };
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsAuthenticated(false);
+    }
+    setLoading(false);
+  }, []);
 
   const login = (email, password) => {
-    const user = users.find(
-      (u) => u.email === email && u.password === password
-    );
-    if (user) {
+    // Simulando una verificación de credenciales
+    if (email === "admin@example.com" && password === "password123") {
+      const token = "fake-jwt-token"; // Token simulado
+      localStorage.setItem("token", token);
       setIsAuthenticated(true);
-      setCurrentUser(user);
       return true;
+    } else {
+      return false;
     }
-    return false;
   };
 
   const logout = () => {
+    localStorage.removeItem("token");
     setIsAuthenticated(false);
-    setCurrentUser(null);
   };
 
   return (
-    <AuthContext.Provider
-      value={{ isAuthenticated, currentUser, register, login, logout }}
-    >
+    <AuthContext.Provider value={{ isAuthenticated, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );
-};
-
-export const useAuth = () => {
-  return useContext(AuthContext);
 };
