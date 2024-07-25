@@ -112,12 +112,14 @@ export default function Home() {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              height: 255,
-              maxWidth: 600,
-              width: "100%",
-              position: "relative",
-              overflow: "hidden",
-              flexDirection: "row",
+              height: 500, // Ajuste de la altura
+              width: "100%", // Ajuste del ancho
+              bgcolor: "#e0e0e0", // Color de fondo gris
+              mx: "auto",
+              mt: 3,
+              p: 3,
+              borderRadius: 2,
+              position: "relative", // Necesario para el degradado
             }}
           >
             <Box
@@ -125,9 +127,12 @@ export default function Home() {
               src={books[activeStep].src}
               alt={books[activeStep].title}
               sx={{
-                width: 150,
+                width: 250,
                 objectFit: "cover",
                 mr: 2,
+                borderRadius: 2,
+                paddingRight: 2,
+                position: "relative", // Necesario para el degradado
               }}
             />
             <Box
@@ -136,6 +141,14 @@ export default function Home() {
                 p: 2,
                 borderRadius: 1,
                 flex: 1,
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                padding: 5,
+                position: "relative",
+                zIndex: 1,
+                overflow: "hidden",
+                maxWidth: "80%", // Limita el ancho de la caja de descripción
               }}
             >
               <Typography variant="body2" color="white">

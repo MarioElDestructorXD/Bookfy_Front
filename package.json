@@ -19,7 +19,6 @@
     "@mui/styled-engine": "^5.16.4",
     "@react-pdf-viewer/core": "^3.12.0",
     "@react-pdf-viewer/default-layout": "^3.12.0",
-    "@react-pdf-viewer/zoom": "^3.12.0",
     "@react-pdf/renderer": "^3.4.4",
     "amazon-cognito-identity-js": "^6.3.12",
     "axios": "^1.7.2",
@@ -28,7 +27,7 @@
     "react-dom": "^18.3.1",
     "react-pdf": "^9.1.0",
     "react-router-dom": "^6.25.1",
-    "sweetalert2": "^11.12.3",
+    "sweetalert2": "^11.6.13",
     "sweetalert2-react-content": "^5.0.7",
     "swiper": "^11.1.5"
   },

@@ -1,7 +1,6 @@
 import  { useState } from 'react';
 import Pagination from '@mui/material/Pagination';
 import {Box, Modal} from '@mui/material';
-
 import Carousel from "../../components/carrusel/Carousel";
 import CardLibro from "../../pages/Books/CardLibro";
 import DetailedCardLibro from "../../pages/Books/DetailedCardLibro";

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
-import '@react-pdf-viewer/core/lib/styles/index.css';
-import '@react-pdf-viewer/default-layout/lib/styles/index.css';
+import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
+import 'react-pdf/dist/esm/Page/TextLayer.css';
 
 import libros from '../../pages/Books/ListLibro';
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
@@ -41,7 +41,7 @@ const Reading = () => {
       <div style={{ width: '80%', height: '80vh', overflow: 'auto', border: '1px solid #ddd', marginTop: '20px', padding: '10px' }}>
         <Document
           file={selectedBook.pdfUrl}
-          onLoadSuccess={({ pageNumber }) => setPageNumber(1)}
+          onLoadSuccess={() => setPageNumber(1)}
         >
           <Page pageNumber={pageNumber} scale={scale} />
         </Document>

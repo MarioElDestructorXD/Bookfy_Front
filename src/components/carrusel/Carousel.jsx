@@ -16,24 +16,24 @@ const Carousel = ({ onLeerClick }) => {
   };
 
   return (
-    <Box sx={{ width: "100%" }}>
-      <Card style={{ position: 'relative', width: '100%' }}>
-        <CardMedia
-          component="img"
-          image={libros[indiceActual].src}
-          title={libros[indiceActual].alt}
-          style={{ width: '100%', height: 'auto' }}
-        />
+    <Box sx={{ width: "100%", display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#f8f8f8', padding: '40px 20px' }}>
+      <Card style={{ position: 'relative', width: '60%', backgroundColor: '#e0e0e0', borderRadius: '10px', overflow: 'hidden', minHeight: '500px', paddingLeft: '20%' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '20px', height: '100%' }}>
+          <CardMedia
+            component="img"
+            image={libros[indiceActual].src}
+            title={libros[indiceActual].alt}
+            style={{ width: 'auto', maxHeight: '100%', borderRadius: '10px', margin: '0 auto' }}
+          />
+        </Box>
         <CardContent style={{
-          position: 'absolute',
-          bottom: '30%',
-          right: '8%',
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          textAlign: 'center',
+          backgroundColor: 'rgba(0, 0, 0, 0.7)',
           color: 'white',
           padding: '20px',
-          borderRadius: '10px',
-          width: '40%',
-          boxSizing: 'border-box'
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center'
         }}>
           <Typography variant="h5" component="h2" style={{ margin: '10px 0' }}>
             {libros[indiceActual].title}
@@ -53,13 +53,14 @@ const Carousel = ({ onLeerClick }) => {
               border: 'none',
               borderRadius: '5px',
               cursor: 'pointer',
-              transition: 'background-color 0.3s ease'
+              transition: 'background-color 0.3s ease',
+              marginTop: '20px'
             }}
             onClick={() => onLeerClick(libros[indiceActual])}
             onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#218838'}
             onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#28a745'}
           >
-            Más Info
+            LEER MÁS
           </Button>
         </CardContent>
         <Box style={{
