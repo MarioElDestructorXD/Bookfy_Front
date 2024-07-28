@@ -1,7 +1,7 @@
 // App.jsx
 import { Container } from "@mui/material";
-import PublicNavBar from "./components/navBar/Clients/NavBar";
-import PrivateNavBar from "./components/navBar/Client/NavBar";
+import PublicNavBar from "./components/NavBar/Clients/NavBar";
+import PrivateNavBar from "./components/NavBar/Client/NavBar";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 // Importaciones de íconos

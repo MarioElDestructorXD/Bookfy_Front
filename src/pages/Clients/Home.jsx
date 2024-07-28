@@ -2,22 +2,23 @@ import { useState, useEffect } from "react";
 import {
   Box,
   Divider,
-  MobileStepper,
-  Paper,
   Typography,
   Grid,
   Card,
   CardMedia,
   CardContent,
-  Button,
 } from "@mui/material";
-import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+import { Parallax, Pagination, Navigation } from "swiper/modules";
 
 export default function Home() {
-  const [books, setBooks] = useState([]);
-  const [activeStep, setActiveStep] = useState(0);
+  const [books,] = useState([]);
+  const [, setActiveStep] = useState(0);
   const [actionBooks, setActionBooks] = useState([]);
   const navigate = useNavigate();
 
@@ -26,17 +27,6 @@ export default function Home() {
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const response = await axios.get(
-          "https://www.googleapis.com/books/v1/volumes?q=subject:fiction"
-        );
-        const booksData = response.data.items.map((item) => ({
-          src: item.volumeInfo.imageLinks?.thumbnail,
-          title: item.volumeInfo.title,
-          description: item.volumeInfo.description?.slice(0, 300) + "...", // Limitar la descripción
-          pdfUrl: item.accessInfo?.pdf?.downloadLink || "#",
-        }));
-        setBooks(booksData);
-
         const actionResponse = await axios.get(
           "https://www.googleapis.com/books/v1/volumes?q=subject:action"
         );
@@ -67,133 +57,157 @@ export default function Home() {
     };
   }, [maxSteps]);
 
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => (prevActiveStep + 1) % maxSteps);
-  };
-
-  const handleBack = () => {
-    setActiveStep(
-      (prevActiveStep) => (prevActiveStep - 1 + maxSteps) % maxSteps
-    );
-  };
-
-  const handleReadMore = () => {
-    navigate("/reading", { state: { pdfUrl: books[activeStep].pdfUrl } });
-  };
-
   const handleCardClick = (pdfUrl) => {
     navigate("/reading", { state: { pdfUrl } });
   };
 
   return (
     <Box sx={{ maxWidth: "auto", flexGrow: 1, mx: "auto", mt: 4 }}>
-      <Typography variant="h5" fontWeight="bold">
-        Ficción
-      </Typography>
-      <Divider orientation="horizontal" flexItem />
-      {books.length > 0 && (
-        <>
-          <Paper
-            square
-            elevation={3}
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              height: 50,
-              pl: 2,
-              mt: 3,
-              bgcolor: "background.default",
-            }}
-          >
-            <Typography variant="h6">{books[activeStep].title}</Typography>
-          </Paper>
+      <Swiper
+        style={{
+          "--swiper-navigation-color": "#fff",
+          "--swiper-pagination-color": "#fff",
+          width: "100%",
+          height: "100%",
+          background: "#000",
+          borderRadius: 5,
+        }}
+        speed={600}
+        parallax={true}
+        pagination={{
+          clickable: true,
+        }}
+        navigation={true}
+        modules={[Parallax, Pagination, Navigation]}
+        className="mySwiper"
+      >
+        <Box
+          slot="container-start"
+          sx={{
+            position: "absolute",
+            left: 0,
+            top: 0,
+            width: "130%",
+            height: "100%",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundImage:
+              "url(https://swiperjs.com/demos/images/nature-2.jpg)",
+          }}
+          data-swiper-parallax="-23%"
+        />
+        <SwiperSlide>
           <Box
             sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: 500, // Ajuste de la altura
-              width: "100%", // Ajuste del ancho
-              bgcolor: "#e0e0e0", // Color de fondo gris
-              mx: "auto",
-              mt: 3,
-              p: 3,
-              borderRadius: 2,
-              position: "relative", // Necesario para el degradado
+              padding: 4, // Puedes ajustar este valor según sea necesario
             }}
           >
             <Box
-              component="img"
-              src={books[activeStep].src}
-              alt={books[activeStep].title}
-              sx={{
-                width: 250,
-                objectFit: "cover",
-                mr: 2,
-                borderRadius: 2,
-                paddingRight: 2,
-                position: "relative", // Necesario para el degradado
-              }}
-            />
-            <Box
-              sx={{
-                bgcolor: "rgba(0, 0, 0, 0.5)",
-                p: 2,
-                borderRadius: 1,
-                flex: 1,
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                padding: 5,
-                position: "relative",
-                zIndex: 1,
-                overflow: "hidden",
-                maxWidth: "80%", // Limita el ancho de la caja de descripción
-              }}
+              className="title"
+              sx={{ fontSize: 41, fontWeight: 300 }}
+              data-swiper-parallax="-300"
             >
-              <Typography variant="body2" color="white">
-                {books[activeStep].description}
-              </Typography>
-              <Button
-                variant="contained"
-                color="primary"
-                size="small"
-                sx={{ mt: 1 }}
-                onClick={handleReadMore}
-              >
-                Leer más
-              </Button>
+              Slide 1
+            </Box>
+            <Box
+              className="subtitle"
+              sx={{ fontSize: 21 }}
+              data-swiper-parallax="-200"
+            >
+              Subtitle
+            </Box>
+            <Box
+              className="text"
+              sx={{ fontSize: 14, maxWidth: 400, lineHeight: 1.3 }}
+              data-swiper-parallax="-100"
+            >
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
+                dictum mattis velit, sit amet faucibus felis iaculis nec. Nulla
+                laoreet justo vitae porttitor porttitor. Suspendisse in sem
+                justo. Integer laoreet magna nec elit suscipit, ac laoreet nibh
+                euismod. Aliquam hendrerit lorem at elit facilisis rutrum. Ut at
+                ullamcorper velit. Nulla ligula nisi, imperdiet ut lacinia nec,
+                tincidunt ut libero. Aenean feugiat non eros quis feugiat.
+              </p>
             </Box>
           </Box>
-          <MobileStepper
-            steps={maxSteps}
-            position="static"
-            activeStep={activeStep}
-            nextButton={
-              <Button
-                size="small"
-                onClick={handleNext}
-                disabled={activeStep === maxSteps - 1}
-              >
-                Siguiente
-                <KeyboardArrowRight />
-              </Button>
-            }
-            backButton={
-              <Button
-                size="small"
-                onClick={handleBack}
-                disabled={activeStep === 0}
-              >
-                <KeyboardArrowLeft />
-                Anterior
-              </Button>
-            }
-            sx={{ bgcolor: "background.default", mt: 2, mb: 3 }}
-          />
-        </>
-      )}
-
+        </SwiperSlide>
+        <SwiperSlide>
+          <Box
+            sx={{
+              padding: 4, // Puedes ajustar este valor según sea necesario
+            }}
+          >
+            <Box
+              className="title"
+              sx={{ fontSize: 41, fontWeight: 300 }}
+              data-swiper-parallax="-300"
+            >
+              Slide 2
+            </Box>
+            <Box
+              className="subtitle"
+              sx={{ fontSize: 21 }}
+              data-swiper-parallax="-200"
+            >
+              Subtitle
+            </Box>
+            <Box
+              className="text"
+              sx={{ fontSize: 14, maxWidth: 400, lineHeight: 1.3 }}
+              data-swiper-parallax="-100"
+            >
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
+                dictum mattis velit, sit amet faucibus felis iaculis nec. Nulla
+                laoreet justo vitae porttitor porttitor. Suspendisse in sem
+                justo. Integer laoreet magna nec elit suscipit, ac laoreet nibh
+                euismod. Aliquam hendrerit lorem at elit facilisis rutrum. Ut at
+                ullamcorper velit. Nulla ligula nisi, imperdiet ut lacinia nec,
+                tincidunt ut libero. Aenean feugiat non eros quis feugiat.
+              </p>
+            </Box>
+          </Box>
+        </SwiperSlide>
+        <SwiperSlide>
+          <Box
+            sx={{
+              padding: 4, // Puedes ajustar este valor según sea necesario
+            }}
+          >
+            <Box
+              className="title"
+              sx={{ fontSize: 41, fontWeight: 300 }}
+              data-swiper-parallax="-300"
+            >
+              Slide 3
+            </Box>
+            <Box
+              className="subtitle"
+              sx={{ fontSize: 21 }}
+              data-swiper-parallax="-200"
+            >
+              Subtitle
+            </Box>
+            <Box
+              className="text"
+              sx={{ fontSize: 14, maxWidth: 400, lineHeight: 1.3 }}
+              data-swiper-parallax="-100"
+            >
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
+                dictum mattis velit, sit amet faucibus felis iaculis nec. Nulla
+                laoreet justo vitae porttitor porttitor. Suspendisse in sem
+                justo. Integer laoreet magna nec elit suscipit, ac laoreet nibh
+                euismod. Aliquam hendrerit lorem at elit facilisis rutrum. Ut at
+                ullamcorper velit. Nulla ligula nisi, imperdiet ut lacinia nec,
+                tincidunt ut libero. Aenean feugiat non eros quis feugiat.
+              </p>
+            </Box>
+          </Box>
+        </SwiperSlide>
+      </Swiper>
       <Typography variant="h5" fontWeight="bold" sx={{ mt: 4 }}>
         Acción
       </Typography>

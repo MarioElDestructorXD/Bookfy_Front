@@ -15,14 +15,6 @@ import EditIcon from "@mui/icons-material/Edit";
 const Perfil = () => {
   return (
     <>
-      <AppBar position="fixed" sx={{ zIndex: 1100 }}>
-        <Toolbar sx={{ bgcolor: "#1976D2" }}>
-          <Typography variant="h6" component="div" color="white">
-            nav
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Toolbar /> {/* To push content below the app bar */}
       <Container
         sx={{ marginTop: "100px", display: "flex", justifyContent: "center" }}
       >

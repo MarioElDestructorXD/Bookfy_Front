@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      setIsAuthenticated(false);
+      setIsAuthenticated(true); //Cambiar para loguear 
     }
     setLoading(false);
   }, []);
