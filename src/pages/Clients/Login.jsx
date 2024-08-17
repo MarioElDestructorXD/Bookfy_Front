@@ -11,12 +11,13 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { NavLink, useNavigate } from "react-router-dom";
-
-import { useAuth } from "../../AuthContext";
 import Logo from "../../assets/images/user.png";
+import authService from '../../shared/service/AuthContext'
+import Swal from 'sweetalert2';
+
 
 export default function Login() {
-  const { login } = useAuth();
+
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,11 +25,37 @@ export default function Login() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const loginSuccessful = await login(email, password);
-    if (loginSuccessful) {
-      navigate("/user"); // Cambia esto según tu lógica
-    } else {
-      alert("Correo o contraseña incorrectos");
+
+    try {
+      const loginResponse = await authService.login(email, password);
+      if (loginResponse) {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Inicio de sesión exitoso",
+          showConfirmButton: false,
+          timer: 1500,
+        }).then(() => {
+          navigate("/user");
+        });
+      } else {
+        // Login failed
+        Swal.fire({
+          position: "center",
+          icon: "error",
+          title: "Error al iniciar sesión",
+          text: "Correo o contraseña incorrectos",
+          showConfirmButton: true,
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Error al iniciar sesión",
+        text: error.message,
+        showConfirmButton: true,
+      });
     }
   };
 
@@ -76,6 +103,7 @@ export default function Login() {
               name="email"
               autoComplete="email"
               autoFocus
+              value={email}
               onChange={(e) => setEmail(e.target.value)}
               sx={{ mb: 2 }}
             />

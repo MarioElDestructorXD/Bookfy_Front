@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { CssBaseline } from "@mui/material";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
@@ -13,13 +13,25 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import { AuthProvider } from "./AuthContext.jsx";
 
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <BrowserRouter>
+const Main = () => {
+  useEffect(() => {
+    document.title = "BOOKIFY";
+  }, []);
+
+  return (
+    <>
       <CssBaseline />
       <AuthProvider>
         <App />
       </AuthProvider>
+    </>
+  );
+};
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <BrowserRouter>
+      <Main />
     </BrowserRouter>
   </React.StrictMode>
 );

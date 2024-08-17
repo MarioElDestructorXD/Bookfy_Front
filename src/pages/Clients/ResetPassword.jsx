@@ -10,27 +10,40 @@ import {
   Box as MuiBox,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
+import authService from '../../shared/service/AuthContext';
+import Swal from 'sweetalert2';
 
 export default function ResetPassword() {
   const [email, setEmail] = useState("");
-  const [ , setOpenModal] = useState(false);
+  const [loading, setLoading] = useState(false); // Estado para manejar el estado de carga
   const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log({
-      email: email,
-    });
-    Swal.fire({
-      position: "center",
-      icon: "success",
-      title: "Correo Enviado",
-      showConfirmButton: false,
-      timer: 1500,
-    }).then(() => {
-      window.location.href = '/';
-    });
+    setLoading(true); // Mostrar carga
+    try {
+      await authService.forgotPassword(email); // Llama a la función forgotPassword
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Correo Enviado",
+        text: "Revisa tu correo para el código de confirmación.",
+        showConfirmButton: false,
+        timer: 1500,
+      }).then(() => {
+        navigate('/'); // Redirigir al usuario después de un tiempo
+      });
+    } catch (error) {
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Error",
+        text: error.message || "Ocurrió un error al enviar el correo.",
+        showConfirmButton: true,
+      });
+    } finally {
+      setLoading(false); // Ocultar carga
+    }
   };
 
   const handleEmailChange = (event) => {
@@ -69,7 +82,7 @@ export default function ResetPassword() {
               required
               fullWidth
               id="email"
-              label="Correo"
+              label="Correo Electrónico"
               name="email"
               autoComplete="email"
               autoFocus
@@ -83,8 +96,9 @@ export default function ResetPassword() {
               variant="contained"
               color="primary"
               sx={{ mt: 2 }}
+              disabled={loading} // Deshabilitar botón mientras se carga
             >
-              Recuperar Contraseña
+              {loading ? 'Enviando...' : 'Recuperar Contraseña'}
             </Button>
           </form>
         </Box>

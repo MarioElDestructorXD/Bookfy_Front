@@ -9,19 +9,18 @@ import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import Swal from "sweetalert2";
-
+import authService from '../../shared/service/AuthContext'
 import Logo from "../../assets/images/user.png";
-import { useAuth } from "../../AuthContext";
 
 export default function Register() {
-  const { register } = useAuth();
+  
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [name, setName] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [secondLastname, setSecondLastname] = useState("");
+  const [phone, setPhone] = useState("");
   const [error, setError] = useState({});
 
   const validateEmail = (email) => {
@@ -29,53 +28,58 @@ export default function Register() {
     return regex.test(email);
   };
 
-  const handleSubmit = (e) => {
+  const validateRequiredFields = () => {
+    return email && name && lastname && phone;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateRequiredFields()) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Todos los campos son obligatorios, excepto el segundo apellido',
+      });
+      return;
+    }
 
     if (!validateEmail(email)) {
       setError({ error: true, message: "Formato de email incorrecto" });
       return;
     }
 
-    if (password !== confirmPassword) {
-      setError({ error: true, message: "Las contraseñas no coinciden" });
-      return;
-    }
-
-    if (password.length < 6) {
-      // Contraseña mínima de 6 caracteres
-      setError({
-        error: true,
-        message: "La contraseña debe tener al menos 6 caracteres",
-      });
-      return;
-    }
-
     setError({ error: false, message: "" });
+    const userDetails = {
+      email,
+      name,
+      lastname,
+      second_lastname: secondLastname,
+      phone_number: phone,
+      id_rol: 2,
+      status: true
+    };
 
-    register({ email, password });
-
-    Swal.fire({
-      position: "center",
-      icon: "success",
-      title: "Registrado Correctamente",
-      showConfirmButton: false,
-      timer: 1500,
-    }).then(() => {
-      navigate("/login");
-    });
-  };
-
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const handleClickShowConfirmPassword = () => {
-    setShowConfirmPassword(!showConfirmPassword);
-  };
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
+    try {
+      const response = await authService.signUp(userDetails);
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: response.message,
+        showConfirmButton: false,
+        timer: 1500,
+      }).then(() => {
+        navigate("/login");
+      });
+    } catch (error) {
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Error al registrar",
+        text: error.message,
+        showConfirmButton: true,
+      });
+    }
   };
 
   return (
@@ -113,6 +117,8 @@ export default function Register() {
             variant="outlined"
             fullWidth
             required
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
           <TextField
             id="lastname"
@@ -121,6 +127,8 @@ export default function Register() {
             variant="outlined"
             fullWidth
             required
+            value={lastname}
+            onChange={(e) => setLastname(e.target.value)}
           />
         </Box>
         <Box
@@ -133,12 +141,14 @@ export default function Register() {
           }}
         >
           <TextField
-            id="lastname2"
+            id="secondLastname"
             label="Apellido Materno"
             type="text"
             variant="outlined"
             fullWidth
             required
+            value={secondLastname}
+            onChange={(e) => setSecondLastname(e.target.value)}
           />
           <TextField
             id="email"
@@ -169,66 +179,8 @@ export default function Register() {
             variant="outlined"
             fullWidth
             required
-          />
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            width: "100%",
-            mt: 2,
-            gap: 2,
-          }}
-        >
-          <TextField
-            id="password"
-            label="Contraseña"
-            type={showPassword ? "text" : "password"}
-            variant="outlined"
-            fullWidth
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  {password && (
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  )}
-                </InputAdornment>
-              ),
-            }}
-          />
-          <TextField
-            id="confirmPassword"
-            label="Confirmar Contraseña"
-            type={showConfirmPassword ? "text" : "password"}
-            variant="outlined"
-            fullWidth
-            required
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  {confirmPassword && (
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowConfirmPassword}
-                      onMouseDown={handleMouseDownPassword}
-                    >
-                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  )}
-                </InputAdornment>
-              ),
-            }}
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
           />
         </Box>
         <Button

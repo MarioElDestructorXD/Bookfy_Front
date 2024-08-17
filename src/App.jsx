@@ -1,7 +1,7 @@
 // App.jsx
 import { Container } from "@mui/material";
-import PublicNavBar from "./components/NavBar/Clients/NavBar";
-import PrivateNavBar from "./components/NavBar/Client/NavBar";
+import PublicNavBar from "./components/navBar/Client/NavBar";
+import PrivateNavBar from "./components/navBar/Client/NavBar";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 // Importaciones de íconos
@@ -41,6 +41,7 @@ export default function App() {
           {/* Rutas públicas */}
           <Route element={<PublicRoute />}>
             <Route exact path="/" element={<Home />} />
+            <Route exact path="/Home" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/resetPassword" element={<ResetPassword />} />
