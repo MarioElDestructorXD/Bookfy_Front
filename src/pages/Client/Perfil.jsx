@@ -1,130 +1,186 @@
-import React from "react";
+import React, { useState } from "react";
 import {
-  Container,
-  Grid,
-  Typography,
-  TextField,
-  Button,
-  Avatar,
   Box,
-  AppBar,
-  Toolbar,
+  Card,
+  CardContent,
+  CardHeader,
+  Divider,
+  Typography,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
-const Perfil = () => {
+const MySwal = withReactContent(Swal);
+
+export default function Perfil() {
+  const [datos, setDatos] = useState({
+    nombre: "Mario Rodriguez Gonzalez",
+    correo: "mario00504@gmail.com",
+    contraseña: "*************",
+  });
+
+  const [open, setOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    nombre: datos.nombre,
+    correo: datos.correo,
+    contraseña: datos.contraseña,
+  });
+
+  const handleEditClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleSave = async () => {
+    // Cierra el modal y muestra el SweetAlert
+    setOpen(false);
+
+    const result = await MySwal.fire({
+      title: "Confirmar",
+      text: "¿Estás seguro de que deseas guardar los cambios?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, guardar",
+      cancelButtonText: "Cancelar",
+    });
+
+    if (result.isConfirmed) {
+      // Actualiza los datos con los valores editados
+      setDatos({
+        nombre: formData.nombre,
+        correo: formData.correo,
+        contraseña: formData.contraseña,
+      });
+
+      // Muestra un mensaje de éxito
+      MySwal.fire("Guardado", "Los datos han sido actualizados", "success");
+    }
+  };
+
+  const handleInputChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.id]: e.target.value,
+    });
+  };
+
   return (
-    <>
-      <Container
-        sx={{ marginTop: "100px", display: "flex", justifyContent: "center" }}
-      >
-        <Box sx={{ width: "100%", maxWidth: "900px", mt: 4 }}>
-          <Grid container spacing={2} sx={{ marginTop: "10px" }}>
-            <Grid item xs={12} md={4} textAlign="center">
-              <Avatar
-                alt="Sheila Camila Sanchez Flores"
-                src="https://static.wikia.nocookie.net/doblaje/images/1/1b/Corazon_de_tinta.jpg/revision/latest?cb=20121202192127&path-prefix=es"
-                sx={{ width: 100, height: 100, margin: "0 auto" }}
-              />
-              <Typography
-                variant="h6"
-                component="div"
-                sx={{ marginTop: "10px" }}
-              >
-                Sheila Camila Sanchez Flores
-              </Typography>
-              <Typography variant="body1">Me gusta My little pony</Typography>
-              <Button startIcon={<EditIcon />} sx={{ marginTop: "10px" }}>
-                Editar
-              </Button>
-            </Grid>
-            <Grid item xs={12} md={8}>
-              <Typography variant="h6" gutterBottom>
-                Información Personal
-              </Typography>
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={4}>
-                  <TextField
-                    fullWidth
-                    label="Nombre"
-                    defaultValue="Sheila"
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={4}>
-                  <TextField
-                    fullWidth
-                    label="Apellido Paterno"
-                    defaultValue="Sanchez"
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={4}>
-                  <TextField
-                    fullWidth
-                    label="Apellido Materno"
-                    defaultValue="Flores"
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="Telefono"
-                    defaultValue="7773448592"
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="Estado"
-                    defaultValue="Morelos"
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    label="Nombre de usuario"
-                    defaultValue="Chiifff"
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    label="Correo electronico"
-                    defaultValue="chiif123@gmail.com"
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12} textAlign="right">
-                  <Button variant="contained" color="primary">
-                    Editar
-                  </Button>
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    label="Contraseña"
-                    defaultValue="bruno123"
-                    variant="outlined"
-                    type="password"
-                  />
-                </Grid>
-                <Grid item xs={12} textAlign="right">
-                  <Button variant="contained" color="primary">
-                    Editar
-                  </Button>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
+    <Card>
+      <CardHeader
+        title="Datos Personales"
+        sx={{ marginLeft: 1, marginRight: 1 }}
+        action={
+          <Button
+            variant="outlined"
+            startIcon={<EditIcon />}
+            onClick={handleEditClick}
+          >
+            Editar Datos
+          </Button>
+        }
+      />
+      <Divider sx={{ marginLeft: 2, marginRight: 2 }} />
+      <CardContent>
+        <Box display="flex" justifyContent="space-between">
+          <Typography
+            variant="body2"
+            sx={{ color: "text.secondary", marginLeft: 2, fontWeight: "bold" }}
+          >
+            Nombre y Apellidos
+          </Typography>
+          <Typography
+            variant="body2"
+            sx={{ color: "text.secondary", marginRight: 2 }}
+          >
+            {datos.nombre}
+          </Typography>
         </Box>
-      </Container>
-    </>
-  );
-};
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          sx={{ marginTop: 2 }}
+        >
+          <Typography
+            variant="body2"
+            sx={{ color: "text.secondary", marginLeft: 2, fontWeight: "bold" }}
+          >
+            Correo Electrónico
+          </Typography>
+          <Typography
+            variant="body2"
+            sx={{ color: "text.secondary", marginRight: 2 }}
+          >
+            {datos.correo}
+          </Typography>
+        </Box>
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          sx={{ marginTop: 2 }}
+        >
+          <Typography
+            variant="body2"
+            sx={{ color: "text.secondary", marginLeft: 2, fontWeight: "bold" }}
+          >
+            Contraseña
+          </Typography>
+          <Typography
+            variant="body2"
+            sx={{ color: "text.secondary", marginRight: 2 }}
+          >
+            {datos.contraseña}
+          </Typography>
+        </Box>
+      </CardContent>
 
-export default Perfil;
+      {/* Dialog for Editing */}
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Editar Datos</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="nombre"
+            label="Nombre y Apellidos"
+            type="text"
+            fullWidth
+            value={formData.nombre}
+            onChange={handleInputChange}
+          />
+          <TextField
+            margin="dense"
+            id="correo"
+            label="Correo Electrónico"
+            type="email"
+            fullWidth
+            value={formData.correo}
+            onChange={handleInputChange}
+          />
+          <TextField
+            margin="dense"
+            id="contraseña"
+            label="Contraseña"
+            type="password"
+            fullWidth
+            value={formData.contraseña}
+            onChange={handleInputChange}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancelar</Button>
+          <Button onClick={handleSave}>Guardar</Button>
+        </DialogActions>
+      </Dialog>
+    </Card>
+  );
+}
