@@ -15,20 +15,23 @@ import {
   Box,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
+import bookService from '../../shared/service/Book'
 
 const TablaLibro = () => {
-  const [books, setBooks] = useState([
-    {
-      id: 1,
-      title: "Fundamentos de JavaScript",
-      description:
-        "Fundamentos de JavaScript está diseñado para aquellos sin experiencia previa en programación.",
-      category: "Programación",
-      author: "Bejidar",
-      year: 2000,
-      status: "Activo",
-    },
-  ]);
+  const [books, setBooks] = useState([]);
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const booksData = await bookService.getAllBooks();
+        setBooks(booksData);
+      } catch (error) {
+        console.error('Error al obtener los libros:', error);
+      }
+    };
+
+    fetchBooks();
+  }, []);
 
   const handleEdit = (id) => {
     console.log("Editar libro con ID:", id);

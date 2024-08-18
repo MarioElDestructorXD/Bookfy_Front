@@ -15,14 +15,14 @@ import Swal from 'sweetalert2';
 
 export default function ResetPassword() {
   const [email, setEmail] = useState("");
-  const [loading, setLoading] = useState(false); // Estado para manejar el estado de carga
+  const [loading, setLoading] = useState(false); 
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setLoading(true); // Mostrar carga
+    setLoading(true); 
     try {
-      await authService.forgotPassword(email); // Llama a la función forgotPassword
+      await authService.forgotPassword(email);
       Swal.fire({
         position: "center",
         icon: "success",
@@ -31,7 +31,7 @@ export default function ResetPassword() {
         showConfirmButton: false,
         timer: 1500,
       }).then(() => {
-        navigate('/'); // Redirigir al usuario después de un tiempo
+        navigate('/'); 
       });
     } catch (error) {
       Swal.fire({
@@ -42,7 +42,7 @@ export default function ResetPassword() {
         showConfirmButton: true,
       });
     } finally {
-      setLoading(false); // Ocultar carga
+      setLoading(false);
     }
   };
 
@@ -96,7 +96,7 @@ export default function ResetPassword() {
               variant="contained"
               color="primary"
               sx={{ mt: 2 }}
-              disabled={loading} // Deshabilitar botón mientras se carga
+              disabled={loading} 
             >
               {loading ? 'Enviando...' : 'Recuperar Contraseña'}
             </Button>

@@ -1,12 +1,15 @@
 import axios from "axios";
 
-let userApi = "";
-let AWS = "";
-const url = `http://${userApi}.execute-api.${AWS}.amazonaws.com/Dev/getAll/`;
+const url = `http://${userApi}.execute-api.${AWS}.amazonaws.com/Prod/getAll/`;
 
 const getAllUsers = async () => {
     try {
-        const response = await axios.get(url);
+        const token = 'YOUR_AUTH_TOKEN';
+        const response = await axios.get(`${url}getAll`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
         if (response.status === 200) {
             const data = response.data;
             if (data.statusCode === 200) {
@@ -23,16 +26,25 @@ const getAllUsers = async () => {
     }
 };
 
+
 const getUserById = async (id_user) => {
     try {
-        const response = await axios.get(url, {
-            params: { id_user }
+        const token = 'YOUR_AUTH_TOKEN'; // Reemplaza con el token adecuado
+        const response = await axios.get(`${url}getUser`, {
+            params: { id_user },
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
         });
-
-        if (response.status === 200 && response.data.statusCode === 200) {
-            return response.data.data;
+        if (response.status === 200) {
+            const data = response.data;
+            if (data.statusCode === 200) {
+                return data.data;
+            } else {
+                throw new Error(data.message);
+            }
         } else {
-            throw new Error(response.data.message || 'Error al obtener el usuario');
+            throw new Error('Error al obtener la respuesta del servidor');
         }
     } catch (error) {
         console.error('Error al obtener el usuario:', error);
@@ -40,8 +52,85 @@ const getUserById = async (id_user) => {
     }
 };
 
+const registerUser = async (userData) => {
+    try {
+        const response = await axios.post(`${url}insert_user`, userData, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (response.status === 200) {
+            const data = response.data;
+            if (data.statusCode === 200) {
+                console.log('Usuario registrado correctamente:', data.message);
+            } else {
+                throw new Error(data.message);
+            }
+        } else {
+            throw new Error('Error al obtener la respuesta del servidor');
+        }
+    } catch (error) {
+        console.error('Error al registrar el usuario:', error);
+    }
+};
+
+const updateUserStatus = async (userId, status) => {
+    try {
+        const response = await axios.post(`${url}updateStatus`, {
+            id_user: userId,
+            status: status
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer YOUR_AUTH_TOKEN'
+            }
+        });
+
+        if (response.status === 200) {
+            const data = response.data;
+            if (data.statusCode === 200) {
+                console.log('Estado del usuario actualizado correctamente:', data.message);
+            } else {
+                throw new Error(data.message);
+            }
+        } else {
+            throw new Error('Error al obtener la respuesta del servidor');
+        }
+    } catch (error) {
+        console.error('Error al actualizar el estado del usuario:', error);
+    }
+};
+
+const updateUser = async (userData) => {
+    try {
+        const response = await axios.post(url, userData, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer YOUR_AUTH_TOKEN' // Reemplaza con el token adecuado
+            }
+        });
+
+        if (response.status === 200) {
+            const data = response.data;
+            if (data.statusCode === 200) {
+                console.log('Usuario actualizado correctamente:', data.message);
+            } else {
+                throw new Error(data.message);
+            }
+        } else {
+            throw new Error('Error al obtener la respuesta del servidor');
+        }
+    } catch (error) {
+        console.error('Error al actualizar el usuario:', error);
+    }
+};
+
+
 
 export default {
     getAllUsers,
-    getUserById
+    getUserById,
+    registerUser,
+    updateUserStatus,
+    updateUser
 }

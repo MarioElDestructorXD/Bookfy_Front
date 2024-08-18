@@ -1,15 +1,13 @@
 import axios from "axios";
 
-let rolApi = "";
-let AWS = "";
-const url = `http://${rolApi}.execute-api.${AWS}.amazonaws.com/Dev/getAll/`;
+const url = `https://9iqsbtipt6.execute-api.us-east-1.amazonaws.com/Prod/`;
 
 const getRoles = async () => {
     try {
-        const response = await axios.get(url_api_get_roles);
+        const response = await axios.get(`${url}getAll`);
 
         if (response.status === 200) {
-            return response.data.data;  // Aquí están los roles obtenidos
+            return response.data.data; 
         } else {
             throw new Error(response.data.error || 'Error al obtener los roles');
         }
@@ -21,7 +19,7 @@ const getRoles = async () => {
 
 const createRole = async (roleData) => {
     try {
-        const response = await axios.post(url_api_create_role, roleData, {
+        const response = await axios.post(`${url}insert_rol`, roleData, {
             headers: {
                 'Content-Type': 'application/json'
             }
