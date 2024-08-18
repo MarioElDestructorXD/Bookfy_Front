@@ -72,7 +72,6 @@ const updateBook = async (bookData) => {
 export default {
     getAllBooks,
     getBookById,
-    uploadBook,
     updateBookStatus,
     updateBook
 }

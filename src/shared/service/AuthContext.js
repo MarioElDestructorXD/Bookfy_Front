@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const url = 'https://xgaqswgg3j.execute-api.us-east-1.amazonaws.com/Prod/'
+const url = 'https://jip98roae5.execute-api.us-east-1.amazonaws.com/Prod/'
 
 const signUp = async (userDetails) => {
     try {
@@ -34,17 +34,13 @@ const login = async (email, password) => {
         });
         if (response.status === 200) {
             const data = response.data;
-            if (data.statusCode === 200) {
-                return data;
-            } else {
-                throw new Error(data.message);
-            }
+            console.log('Tokens:', data);
+            return data;
         } else {
-            throw new Error('Error al obtener la respuesta del servidor');
+            console.error('Error en la respuesta del servidor');
         }
     } catch (error) {
-        console.error('Error al iniciar sesión:', error.message);
-        throw error;
+        console.error('Error al iniciar sesión:', error.response?.data?.error_message || error.message);
     }
 };
 
@@ -55,55 +51,53 @@ const forgotPassword = async (email) => {
                 'Content-Type': 'application/json',
             }
         });
-
-        if (response.status === 200) {
-            const data = response.data;
-            if (data.statusCode === 200) {
-                return data;
-            } else {
-                throw new Error(data.error_message || 'Error en la solicitud');
-            }
+        const { data } = response;
+        if (response.status === 200 && data.message) {
+            return data;
         } else {
-            throw new Error('Error al obtener la respuesta del servidor');
+            throw new Error(data.error_message || 'Error en la solicitud');
         }
     } catch (error) {
-        console.error('Error al solicitar el restablecimiento de contraseña:', error.message);
+        console.error('Error al solicitar el restablecimiento de contraseña:', error.message || error);
         throw error;
     }
 };
 
-const resetPassword = async (email, confirmationCode, newPassword) => {
+
+const confirmPassword = async (email, confirmationCode, newPassword) => {
     try {
-        const response = await axios.post(`${url}reset_password`, { 
-            email, 
-            confirmation_code: confirmationCode, 
-            new_password: newPassword 
+        const response = await axios.post(`${url}confirm_password`, {
+            email,
+            confirmation_code: confirmationCode,
+            new_password: newPassword
         }, {
             headers: {
                 'Content-Type': 'application/json',
             }
         });
-
+        console.log("Respuesta del servidor:", response);
         if (response.status === 200) {
             const data = response.data;
-            if (data.statusCode === 200) {
+            if (data.message) {
                 return data;
             } else {
-                throw new Error(data.message || 'Error en la solicitud');
+                throw new Error('No se recibió un mensaje en la respuesta');
             }
         } else {
-            throw new Error('Error al obtener la respuesta del servidor');
+            throw new Error(`Error del servidor: ${response.status}`);
         }
     } catch (error) {
-        console.error('Error al restablecer la contraseña:', error.message);
-        throw error; // Lanza el error para que pueda ser manejado en el frontend
+        console.error('Error al restablecer la contraseña:', error);
+        throw new Error(error.response?.data?.message || error.message);
     }
 };
+
+
 
 export default {
     signUp,
     login,
     forgotPassword,
-    resetPassword
+    confirmPassword
 }
 

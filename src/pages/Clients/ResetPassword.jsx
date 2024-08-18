@@ -15,36 +15,37 @@ import Swal from 'sweetalert2';
 
 export default function ResetPassword() {
   const [email, setEmail] = useState("");
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true); 
     try {
-      await authService.forgotPassword(email);
-      Swal.fire({
-        position: "center",
-        icon: "success",
-        title: "Correo Enviado",
-        text: "Revisa tu correo para el código de confirmación.",
-        showConfirmButton: false,
-        timer: 1500,
-      }).then(() => {
-        navigate('/'); 
-      });
+        const data = await authService.forgotPassword(email);
+        Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Correo Enviado",
+            text: data.message || "Revisa tu correo para el código de confirmación.",
+            showConfirmButton: false,
+            timer: 1500,
+        }).then(() => {
+            navigate('/'); 
+        });
     } catch (error) {
-      Swal.fire({
-        position: "center",
-        icon: "error",
-        title: "Error",
-        text: error.message || "Ocurrió un error al enviar el correo.",
-        showConfirmButton: true,
-      });
+        Swal.fire({
+            position: "center",
+            icon: "error",
+            title: "Error",
+            text: error.message || "Ocurrió un error al enviar el correo.",
+            showConfirmButton: true,
+        });
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
-  };
+};
+
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -96,7 +97,7 @@ export default function ResetPassword() {
               variant="contained"
               color="primary"
               sx={{ mt: 2 }}
-              disabled={loading} 
+              disabled={loading}
             >
               {loading ? 'Enviando...' : 'Recuperar Contraseña'}
             </Button>

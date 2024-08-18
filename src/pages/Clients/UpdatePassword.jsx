@@ -16,32 +16,65 @@ import {
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import CheckIcon from "../../assets/images/verify.gif"
+import authService from '../../shared/service/AuthContext'
+import Swal from "sweetalert2";
 
 
 export default function UpdatePassword() {
   const [passwords, setPasswords] = useState({
-    currentPassword: "",
+    email: "",
+    confirmationCode: "",
     newPassword: "",
     repeatPassword: "",
   });
   const [showPasswords, setShowPasswords] = useState({
-    currentPassword: false,
+    confirmationCode: false,
     newPassword: false,
     repeatPassword: false,
   });
   const [openModal, setOpenModal] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      currentPassword: data.get("currentPassword"),
-      newPassword: data.get("newPassword"),
-      repeatPassword: data.get("repeatPassword"),
-    });
-    setOpenModal(true);
-  };
+    const { email, confirmationCode, newPassword, repeatPassword } = passwords;
+  
+    if (newPassword !== repeatPassword) {
+      Swal.fire({
+        icon: "warning",
+        text: "Las contraseñas nuevas no coinciden.",
+      });
+      return;
+    }
+  
+    setLoading(true);
+    try {
+      const data = await authService.confirmPassword(email, confirmationCode, repeatPassword);
+      console.log("Respuesta del servidor:", data);
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Contraseña Restablecida",
+        text: data.message || "Contraseña restablecida correctamente.",
+        showConfirmButton: false,
+        timer: 1500,
+      }).then(() => {
+        navigate('/');
+      });
+    } catch (error) {
+      console.error("Error al restablecer la contraseña:", error);
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Error",
+        text: error.message || "Ocurrió un error al restablecer la contraseña.",
+        showConfirmButton: true,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };  
 
   const handlePasswordChange = (prop) => (event) => {
     setPasswords({ ...passwords, [prop]: event.target.value });
@@ -53,11 +86,6 @@ export default function UpdatePassword() {
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
-  };
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
-    navigate("/", { replace: true });
   };
 
   return (
@@ -89,22 +117,36 @@ export default function UpdatePassword() {
               margin="normal"
               required
               fullWidth
-              name="currentPassword"
-              label="Contraseña Actual"
-              type={showPasswords.currentPassword ? "text" : "password"}
-              id="currentPassword"
-              autoComplete="current-password"
-              value={passwords.currentPassword}
-              onChange={handlePasswordChange("currentPassword")}
+              name="email"
+              label="Correo Electrónico"
+              type="email"
+              id="email"
+              autoComplete="email"
+              value={passwords.email}
+              onChange={handlePasswordChange("email")}
+              sx={{ mb: 3 }}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="confirmationCode"
+              label="Código de Verificación"
+              type={showPasswords.confirmationCode ? "text" : "password"}
+              id="confirmationCode"
+              autoComplete="off"
+              value={passwords.confirmationCode}
+              onChange={handlePasswordChange("confirmationCode")}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
                     <IconButton
                       aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword("currentPassword")}
+                      onClick={handleClickShowPassword("confirmationCode")}
                       onMouseDown={handleMouseDownPassword}
                     >
-                      {showPasswords.currentPassword ? (
+                      {showPasswords.confirmationCode ? (
                         <VisibilityOff />
                       ) : (
                         <Visibility />
@@ -189,6 +231,7 @@ export default function UpdatePassword() {
                 variant="contained"
                 color="success"
                 sx={{ mr: 1 }}
+                disabled={loading}
               >
                 Actualizar
               </Button>
@@ -198,53 +241,6 @@ export default function UpdatePassword() {
             </Box>
           </form>
         </Box>
-        <Modal
-          open={openModal}
-          onClose={handleCloseModal}
-          aria-labelledby="modal-title"
-          aria-describedby="modal-description"
-        >
-          <Box
-            sx={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              width: 600,
-              bgcolor: "background.paper",
-              borderRadius: "10px",
-              boxShadow: 24,
-              p: 4,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <img
-              src={CheckIcon} // Cambia esta ruta por la ubicación de tu gif
-              alt="Checkmark"
-              style={{ width: "100px", height: "100px" }}
-            />{" "}
-            <Typography
-              id="modal-title"
-              variant="h6"
-              component="h2"
-              sx={{ mt: 2 }}
-            >
-              Contraseña Actualizada
-            </Typography>
-            <Typography id="modal-description" sx={{ mt: 2 }}>
-              Su contraseña ha sido actualizada exitosamente.
-            </Typography>
-            <Button
-              onClick={handleCloseModal}
-              variant="contained"
-              sx={{ mt: 2 }}
-            >
-              Cerrar
-            </Button>
-          </Box>
-        </Modal>
       </Container>
     </Box>
   );

@@ -25,39 +25,35 @@ export default function Login() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     try {
-      const loginResponse = await authService.login(email, password);
-      if (loginResponse) {
-        Swal.fire({
-          position: "center",
-          icon: "success",
-          title: "Inicio de sesión exitoso",
-          showConfirmButton: false,
-          timer: 1500,
-        }).then(() => {
-          navigate("/user");
-        });
-      } else {
-        // Login failed
-        Swal.fire({
-          position: "center",
-          icon: "error",
-          title: "Error al iniciar sesión",
-          text: "Correo o contraseña incorrectos",
-          showConfirmButton: true,
-        });
-      }
+        const loginResponse = await authService.login(email, password);
+        if (loginResponse) {
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Inicio de sesión exitoso",
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        } else {
+            Swal.fire({
+                position: "center",
+                icon: "error",
+                title: "Error al iniciar sesión",
+                text: "Correo o contraseña incorrectos",
+                showConfirmButton: true,
+            });
+        }
     } catch (error) {
-      Swal.fire({
-        position: "center",
-        icon: "error",
-        title: "Error al iniciar sesión",
-        text: error.message,
-        showConfirmButton: true,
-      });
+        Swal.fire({
+            position: "center",
+            icon: "error",
+            title: "Error al iniciar sesión",
+            text: error.message,
+            showConfirmButton: true,
+        });
     }
-  };
+};
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
