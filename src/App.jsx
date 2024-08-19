@@ -1,6 +1,7 @@
 import { Container } from "@mui/material";
 import PublicNavBar from "./components/NavBar/Clients/NavBar";
 import PrivateNavBar from "./components/NavBar/Client/NavBar";
+import AdminNavBar from "./components/NavBar/Admin/NavBar";
 import { Route, Routes } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 // Importaciones de páginas
@@ -25,11 +26,21 @@ import AdminRoute from "./Routers/AdminRoute";
 import Unauthorized from "./pages/Errors/Unauthorized"; // Página de acceso denegado
 
 export default function App() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
+
+  const renderNavBar = () => {
+    if (user?.role === "admin") {
+      return <AdminNavBar />;
+    } else if (isAuthenticated) {
+      return <PrivateNavBar />;
+    } else {
+      return <PublicNavBar />;
+    }
+  };
 
   return (
     <>
-      {isAuthenticated ? <PrivateNavBar /> : <PublicNavBar />}
+      {renderNavBar()}
       <Container sx={{ mt: 5 }}>
         <Routes>
           {/* Rutas públicas */}

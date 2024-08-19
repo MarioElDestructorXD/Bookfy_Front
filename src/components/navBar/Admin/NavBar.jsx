@@ -91,7 +91,7 @@ export default function NavBar() {
               }}
             >
               <NavLink
-                to="/biblioteca"
+                to="/tablaUsuario"
                 style={({ isActive }) => ({
                   marginRight: "16px",
                   display: "flex",
@@ -106,11 +106,11 @@ export default function NavBar() {
                   variant="h7"
                   sx={{ cursor: "pointer", textAlign: "center" }}
                 >
-                  Mi Biblioteca
+                  Usuarios
                 </Typography>
               </NavLink>
               <NavLink
-                to="/search"
+                to="/tablaLibros"
                 style={({ isActive }) => ({
                   marginRight: "16px",
                   display: "flex",
@@ -125,26 +125,7 @@ export default function NavBar() {
                   variant="h7"
                   sx={{ cursor: "pointer", textAlign: "center" }}
                 >
-                  Buscar
-                </Typography>
-              </NavLink>
-              <NavLink
-                to="/perfil"
-                style={({ isActive }) => ({
-                  marginRight: "16px",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  textDecoration: "none",
-                  borderBottom: isActive ? "4px solid" : "none",
-                  color: "inherit",
-                })}
-              >
-                <Typography
-                  variant="h7"
-                  sx={{ cursor: "pointer", textAlign: "center" }}
-                >
-                  Perfil
+                  Libros
                 </Typography>
               </NavLink>
             </Box>
