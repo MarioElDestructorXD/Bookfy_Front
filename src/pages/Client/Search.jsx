@@ -10,8 +10,8 @@ import CardMedia from "@mui/material/CardMedia";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom"; // Importa el hook useNavigate
 
-// Componente styled para la barra de búsqueda
 const SearchBar = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -30,7 +30,6 @@ const SearchBar = styled("div")(({ theme }) => ({
   },
 }));
 
-// Componente styled para el campo de entrada
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "inherit",
   width: "100%",
@@ -47,10 +46,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-// Componente funcional de búsqueda
 export default function SearchComponent() {
   const [query, setQuery] = useState("");
   const [books, setBooks] = useState([]);
+  const navigate = useNavigate(); // Inicializa el hook useNavigate
 
   const handleSearch = async () => {
     if (query) {
@@ -87,7 +86,11 @@ export default function SearchComponent() {
         </div>
       `,
       showConfirmButton: true,
-      confirmButtonText: "Cerrar",
+      confirmButtonText: "Leer",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        navigate(`/reading`); // Redirige a la ruta /reading/{book.id}
+      }
     });
   };
 
