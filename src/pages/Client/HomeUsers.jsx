@@ -20,13 +20,13 @@ import withReactContent from "sweetalert2-react-content";
 
 const MySwal = withReactContent(Swal);
 
-export default function Home() {
-  const [books] = useState([]);
-  const [, setActiveStep] = useState(0);
+const truncateText = (text, length) => {
+  return text.length > length ? `${text.slice(0, length)}...` : text;
+};
+
+export default function HomeUser() {
   const [actionBooks, setActionBooks] = useState([]);
   const navigate = useNavigate();
-
-  const maxSteps = books.length;
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -37,7 +37,8 @@ export default function Home() {
         const actionBooksData = actionResponse.data.items.map((item) => ({
           src: item.volumeInfo.imageLinks?.thumbnail,
           title: item.volumeInfo.title,
-          description: item.volumeInfo.description?.slice(0, 100) + "...",
+          description:
+            item.volumeInfo.description || "No description available.",
           genres: item.volumeInfo.categories || [],
           pdfUrl: item.accessInfo?.pdf?.downloadLink || "#",
         }));
@@ -50,47 +51,78 @@ export default function Home() {
     fetchBooks();
   }, []);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setActiveStep((prevActiveStep) =>
-        prevActiveStep === maxSteps - 1 ? 0 : prevActiveStep + 1
-      );
-    }, 5000);
-
-    return () => {
-      clearInterval(timer);
-    };
-  }, [maxSteps]);
-
   const handleCardClick = (book) => {
     MySwal.fire({
-      title: book.title,
       html: (
-        <Box>
-          <img src={book.src} alt={book.title} style={{ width: "100%" }} />
-          <Typography variant="subtitle2" color="text.secondary">
-            {book.genres.join(", ")}
-          </Typography>
-          <Typography variant="body2">{book.description}</Typography>
-          <button
-            onClick={() => {
-              navigate("/reading", { state: { pdfUrl: book.pdfUrl } });
-              MySwal.close();
-            }}
-            style={{
-              marginTop: "10px",
-              padding: "10px 20px",
-              backgroundColor: "#007bff",
-              color: "#fff",
-              border: "none",
-              cursor: "pointer",
-            }}
-          >
-            Leer libro
-          </button>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "flex-start",
+          }}
+        >
+          <Box sx={{ flex: 1, mr: 2 }}>
+            <img
+              src={book.src}
+              alt={book.title}
+              style={{ width: "100%", borderRadius: "10px" }}
+            />
+          </Box>
+
+          <Box sx={{ flex: 2 }}>
+            <Typography variant="h5" fontWeight="bold">
+              {book.title}
+            </Typography>
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mt: 1 }}>
+              {book.genres.map((genre, index) => (
+                <Box
+                  key={index}
+                  sx={{
+                    backgroundColor:
+                      genre === "Fantasy" ? "#FF5733" : "#FFC300",
+                    borderRadius: "15px",
+                    padding: "2px 8px",
+                    fontSize: "0.8rem",
+                    color: "#fff",
+                  }}
+                >
+                  {genre}
+                </Box>
+              ))}
+            </Box>
+            <Typography variant="body2" sx={{ mt: 2 }}>
+              {truncateText(book.description, 100)}
+            </Typography>
+            <button
+              onClick={() => {
+                navigate("/reading", { state: { pdfUrl: book.pdfUrl } });
+                MySwal.close();
+              }}
+              style={{
+                marginTop: "20px",
+                padding: "10px 40px",
+                backgroundColor: "#28A745",
+                color: "#fff",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer",
+                fontSize: "1rem",
+                fontWeight: "bold",
+              }}
+            >
+              Leer
+            </button>
+          </Box>
         </Box>
       ),
       showConfirmButton: false,
+      width: "600px",
+      padding: "20px",
+      background: "#fff",
+      backdrop: "rgba(0,0,0,0.4)",
+      customClass: {
+        popup: "rounded-lg",
+      },
     });
   };
 
@@ -245,30 +277,72 @@ export default function Home() {
         Acción
       </Typography>
       <Divider orientation="horizontal" flexItem />
-      {actionBooks.length > 0 && (
-        <Grid container spacing={2} sx={{ mt: 2, mb: 2 }}>
-          {actionBooks.map((book, index) => (
-            <Grid item xs={12} sm={6} md={2} key={index}>
-              <Card sx={{ height: 400 }} onClick={() => handleCardClick(book)}>
-                <CardMedia
-                  component="img"
-                  height="140"
-                  image={book.src}
-                  alt={book.title}
-                />
-                <CardContent>
-                  <Typography gutterBottom variant="subtitle1" component="div">
-                    {book.title}
-                  </Typography>
-                  <Typography variant="subtitle2" color="text.secondary">
-                    {book.description}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      )}
+      <Grid container spacing={2} sx={{ mt: 2, mb: 2 }}>
+        {actionBooks.map((book, index) => (
+          <Grid item xs={12} sm={6} md={4} key={index}>
+            <Card
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                borderRadius: "10px",
+                boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                height: "100%",
+                overflow: "hidden",
+              }}
+              onClick={() => handleCardClick(book)}
+            >
+              <CardMedia
+                component="img"
+                image={book.src}
+                alt={book.title}
+                sx={{
+                  width: "30%",
+                  height: "100%",
+                  objectFit: "cover",
+                  borderRadius: "10px 0 0 10px",
+                }}
+              />
+              <CardContent
+                sx={{
+                  flex: "1",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  padding: "16px",
+                }}
+              >
+                <Typography
+                  gutterBottom
+                  variant="subtitle1"
+                  component="div"
+                  sx={{
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {truncateText(book.title, 25)}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    display: "-webkit-box",
+                    WebkitLineClamp: 3,
+                    WebkitBoxOrient: "vertical",
+                    height: "60px",
+                  }}
+                >
+                  {truncateText(book.description, 100)}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
     </Box>
   );
 }

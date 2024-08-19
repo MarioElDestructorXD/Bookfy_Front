@@ -29,6 +29,7 @@ import NotFound from "./pages/Errors/NotFound";
 import PublicRoute from "./Routers/PublicRoute";
 import PrivateRoute from "./Routers/PrivateRoute";
 import Catalogue from "./pages/Clients/Catalogue";
+import Search from "./pages/Client/Search";
 
 export default function App() {
   const { isAuthenticated } = useAuth();
@@ -50,6 +51,7 @@ export default function App() {
           {/* Rutas privadas */}
           <Route element={<PrivateRoute />}>
             <Route path="/user" element={<HomeUser />} />
+            <Route path="/search" element={<Search />} />
             <Route path="/reading" element={<Reading />} />
             <Route path="/perfil" element={<Perfil />} />
             <Route path="/biblioteca" element={<MiBiblioteca />} />

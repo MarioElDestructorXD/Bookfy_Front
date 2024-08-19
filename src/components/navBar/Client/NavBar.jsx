@@ -91,7 +91,7 @@ export default function NavBar() {
               }}
             >
               <NavLink
-                to="/Home"
+                to="/biblioteca"
                 style={({ isActive }) => ({
                   marginRight: "16px",
                   display: "flex",
@@ -106,7 +106,26 @@ export default function NavBar() {
                   variant="h7"
                   sx={{ cursor: "pointer", textAlign: "center" }}
                 >
-                  Libros
+                  Mi Biblioteca
+                </Typography>
+              </NavLink>
+              <NavLink
+                to="/search"
+                style={({ isActive }) => ({
+                  marginRight: "16px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  textDecoration: "none",
+                  borderBottom: isActive ? "4px solid" : "none",
+                  color: "inherit",
+                })}
+              >
+                <Typography
+                  variant="h7"
+                  sx={{ cursor: "pointer", textAlign: "center" }}
+                >
+                  Buscar
                 </Typography>
               </NavLink>
               <NavLink
