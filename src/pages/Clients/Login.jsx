@@ -25,8 +25,14 @@ export default function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const loginSuccessful = await login(email, password);
+
     if (loginSuccessful) {
-      navigate("/user"); // Cambia esto según tu lógica
+      const userRole = localStorage.getItem("role");
+      if (userRole === "admin") {
+        navigate("/tablaUsuario"); // Redirigir a la página de administrador
+      } else {
+        navigate("/user"); // Redirigir a la página de usuario regular
+      }
     } else {
       alert("Correo o contraseña incorrectos");
     }

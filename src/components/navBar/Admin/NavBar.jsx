@@ -42,11 +42,8 @@ export default function NavBar() {
 
   const handleLogout = () => {
     // Lógica para cerrar sesión
-    localStorage.removeItem("token"); // Eliminar token
-    localStorage.removeItem("role"); // Eliminar rol (si lo tienes)
     handleMenuClose();
     navigate("/login");
-    window.location.reload(); // Recargar la página para asegurarse de que el estado de autenticación se actualice
   };
 
   return (
