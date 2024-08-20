@@ -7,6 +7,8 @@ export default defineConfig({
   optimizeDeps: {
     include: [
       "@mui/material/Box",
+      "pdfjs-dist/build/pdf",
+      "pdfjs-dist/build/pdf.worker.entry"
     ],
  },
 })

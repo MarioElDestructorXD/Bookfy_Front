@@ -112,6 +112,17 @@ const getDrama = async () => {
     }
 };
 
+const getFantasy = async () => {
+    try {
+        const response = await axios.get(`${url_Api_Google}fantasy`);
+        return formatBookData(response.data);
+    } catch (error) {
+        console.error('Error al obtener ApiAction:', error);
+        throw error;
+    }
+};
+
+
 export default {
     getAllBooks,
     getBookById,
@@ -120,5 +131,6 @@ export default {
     createBook,
     getRomantic,
     getFiction,
-    getDrama
+    getDrama,
+    getFantasy
 }

@@ -1,14 +1,16 @@
-// PrivateRoute.jsx
-import React from "react";
-import { useAuth } from "../AuthContext";
 import { Navigate, Outlet } from "react-router-dom";
+import { useAuth } from "../AuthContext";
 
 export default function PrivateRoute() {
   const { isAuthenticated, loading } = useAuth();
 
   if (loading) {
-    return <div>Loading...</div>; // Puedes personalizar un componente de carga
+    return <div>Loading...</div>;
   }
 
-  return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
+  if (!isAuthenticated) {
+    return <Navigate to="/login" />;
+  }
+
+  return <Outlet />;
 }
