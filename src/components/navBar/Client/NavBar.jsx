@@ -81,7 +81,7 @@ export default function NavBar() {
                   variant="h6"
                   sx={{ cursor: "pointer", textAlign: "center" }}
                 >
-                  Bookfy
+                  Bookify
                 </Typography>
               </Button>
             </Box>
@@ -94,7 +94,7 @@ export default function NavBar() {
               }}
             >
               <NavLink
-                to="/biblioteca"
+                to="client/user"
                 style={({ isActive }) => ({
                   marginRight: "16px",
                   display: "flex",
@@ -113,7 +113,7 @@ export default function NavBar() {
                 </Typography>
               </NavLink>
               <NavLink
-                to="/search"
+                to="client/search"
                 style={({ isActive }) => ({
                   marginRight: "16px",
                   display: "flex",
@@ -132,7 +132,7 @@ export default function NavBar() {
                 </Typography>
               </NavLink>
               <NavLink
-                to="/perfil"
+                to="client/perfil"
                 style={({ isActive }) => ({
                   marginRight: "16px",
                   display: "flex",
@@ -186,7 +186,7 @@ export default function NavBar() {
           >
             <CardContent>
               <Typography variant="h5" color="textPrimary" fontWeight="bold">
-                BOOKFY
+                BOOKIFY
               </Typography>
             </CardContent>
           </Card>

@@ -1,7 +1,7 @@
 .custom-loader {
     width: 69px;
     height: 36px;
-    --c: radial-gradient(farthest-side, #6AA6F4 90%, #0000);
+    --c: radial-gradient(farthest-side, #6AA6F1 90%, #0000);
     background: var(--c), var(--c), var(--c), var(--c);
     background-size: 12px 12px;
     background-repeat: no-repeat;
