@@ -122,6 +122,31 @@ const getFantasy = async () => {
     }
 };
 
+const getBooksByCategory = async (category) => {
+    try {
+        const response = await axios.get(`${url_Api_Google}${category}`);
+        return formatBookData(response.data);
+    } catch (error) {
+        console.error(`Error al obtener libros de ${category}:`, error);
+        throw error;
+    }
+};
+
+const getBooksGoogle = async () => {
+    try {
+        const [romanticBooks, fictionBooks, dramaBooks, fantasyBooks] = await Promise.all([
+            getBooksByCategory('romance'),
+            getBooksByCategory('fiction'),
+            getBooksByCategory('drama'),
+            getBooksByCategory('fantasy')
+        ]);
+        return [...romanticBooks, ...fictionBooks, ...dramaBooks, ...fantasyBooks];
+    } catch (error) {
+        console.error('Error al obtener todos los libros:', error);
+        throw error;
+    }
+};
+
 
 export default {
     getAllBooks,
@@ -132,5 +157,7 @@ export default {
     getRomantic,
     getFiction,
     getDrama,
-    getFantasy
+    getFantasy,
+    getBooksByCategory,
+    getBooksGoogle
 }

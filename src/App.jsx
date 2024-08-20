@@ -45,7 +45,7 @@ export default function App() {
         <Routes>
           {/* Rutas públicas */}
           <Route element={<PublicRoute />}>
-            <Route path="/home" element={<Home />} />
+            <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/resetPassword" element={<ResetPassword />} />
@@ -59,7 +59,7 @@ export default function App() {
             <Route path="/search" element={<Search />} />
             <Route path="/reading" element={<Reading />} />
             <Route path="/perfil" element={<Perfil />} />
-            <Route path="/biblioteca" element={<MiBiblioteca />} />
+            {/*<Route path="/biblioteca" element={<MiBiblioteca />} />*/}
           </Route>
 
           {/* Rutas de administración */}

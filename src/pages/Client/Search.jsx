@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { styled, alpha } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import InputBase from "@mui/material/InputBase";
@@ -10,7 +10,9 @@ import CardMedia from "@mui/material/CardMedia";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom"; // Importa el hook useNavigate
+import { useNavigate } from "react-router-dom";
+import bookService from '../../shared/service/Book';
+import Load from '../../shared/plugins/Load';
 
 const SearchBar = styled("div")(({ theme }) => ({
   position: "relative",
@@ -48,16 +50,42 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function SearchComponent() {
   const [query, setQuery] = useState("");
-  const [books, setBooks] = useState([]);
-  const navigate = useNavigate(); // Inicializa el hook useNavigate
+  const [allBooks, setAllBooks] = useState([]);
+  const [filteredBooks, setFilteredBooks] = useState([]);
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
 
-  const handleSearch = async () => {
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const books = await bookService.getBooksGoogle();
+        setAllBooks(books);
+        setFilteredBooks(books);
+      } catch (error) {
+        console.error('Error al obtener libros:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'No se pudieron obtener los libros.',
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBooks();
+  }, []);
+
+  const handleSearch = () => {
     if (query) {
-      const response = await fetch(
-        `https://www.googleapis.com/books/v1/volumes?q=${query}`
+      const result = allBooks.filter(book =>
+        book.title.toLowerCase().includes(query.toLowerCase()) ||
+        (book.description || "").toLowerCase().includes(query.toLowerCase())
       );
-      const data = await response.json();
-      setBooks(data.items || []);
+      setFilteredBooks(result);
+    } else {
+      setFilteredBooks(allBooks);
     }
   };
 
@@ -76,30 +104,31 @@ export default function SearchComponent() {
       width: "80%",
       html: `
         <div style="display: flex; align-items: center;">
-          <img src="${book.volumeInfo.imageLinks?.thumbnail}" alt="${
-        book.volumeInfo.title
-      }" style="width: 200px; height: 300px; margin-right: 20px;" />
+          <img src="${book.thumbnail}" alt="${book.title}" style="width: 200px; height: 300px; margin-right: 20px;" />
           <div style="flex: 1;">
-            <h2>${book.volumeInfo.title}</h2>
-            <p>${book.volumeInfo.description || "No description available."}</p>
+            <h2>${book.title}</h2>
+            <p>${book.description || "No description available."}</p>
           </div>
         </div>
       `,
       showConfirmButton: true,
       confirmButtonText: "Leer",
+      confirmButtonColor: '#6A4000',
     }).then((result) => {
       if (result.isConfirmed) {
-        navigate(`/reading`); // Redirige a la ruta /reading/{book.id}
+        navigate(`/reading`); // Redirige a la ruta /reading
       }
     });
   };
 
-  const filteredBooks = books.filter(
-    (book) =>
-      book.volumeInfo.imageLinks?.thumbnail &&
-      book.volumeInfo.title &&
-      book.volumeInfo.description
-  );
+  if (loading) {
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+        <Load />
+      </Box>
+    );
+  }
+
 
   return (
     <Box sx={{ flexGrow: 1, p: 2 }}>
@@ -116,8 +145,8 @@ export default function SearchComponent() {
         </IconButton>
       </SearchBar>
       <Grid container spacing={2} sx={{ mt: 2 }}>
-        {filteredBooks.map((book) => (
-          <Grid item xs={12} sm={6} md={4} key={book.id}>
+        {filteredBooks.map((book, index) => (
+          <Grid item xs={12} sm={6} md={4} key={index}>
             <Card
               sx={{ display: "flex", cursor: "pointer" }}
               onClick={() => showAlert(book)}
@@ -125,16 +154,16 @@ export default function SearchComponent() {
               <CardMedia
                 component="img"
                 sx={{ width: 150 }}
-                image={book.volumeInfo.imageLinks.thumbnail}
-                alt={book.volumeInfo.title}
+                image={book.thumbnail}
+                alt={book.title}
               />
               <Box sx={{ display: "flex", flexDirection: "column" }}>
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
-                    {truncateText(book.volumeInfo.title, 20)}
+                    {truncateText(book.title, 20)}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {truncateText(book.volumeInfo.description, 100)}
+                    {truncateText(book.description, 100)}
                   </Typography>
                 </CardContent>
               </Box>
