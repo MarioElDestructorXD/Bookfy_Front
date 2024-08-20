@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const url = `https://elrumbe8f5.execute-api.us-east-1.amazonaws.com/Prod/`;
+const url = `https://07vb1uj423.execute-api.us-east-1.amazonaws.com/Prod/`;
+const url_Api_Google = 'https://www.googleapis.com/books/v1/volumes?q=subject:';
 
 const createBook = async (bookData) => {
     try {
@@ -68,10 +69,56 @@ const updateBook = async (bookData) => {
     }
 };
 
+//----------------------------------------------------------------
+
+const formatBookData = (data) => {
+    return data.items.map(item => ({
+        title: item.volumeInfo.title,
+        authors: item.volumeInfo.authors,
+        publisher: item.volumeInfo.publisher,
+        publishedDate: item.volumeInfo.publishedDate,
+        description: item.volumeInfo.description,
+        thumbnail: item.volumeInfo.imageLinks?.thumbnail
+    }));
+};
+
+const getRomantic = async () => {
+    try {
+        const response = await axios.get(`${url_Api_Google}romance`);
+        return formatBookData(response.data);
+    } catch (error) {
+        console.error('Error al obtener ApiRomance:', error);
+        throw error;
+    }
+};
+
+const getFiction = async () => {
+    try {
+        const response = await axios.get(`${url_Api_Google}fiction`);
+        return formatBookData(response.data);
+    } catch (error) {
+        console.error('Error al obtener ApiFiction:', error);
+        throw error;
+    }
+};
+
+const getDrama = async () => {
+    try {
+        const response = await axios.get(`${url_Api_Google}drama`);
+        return formatBookData(response.data);
+    } catch (error) {
+        console.error('Error al obtener ApiDrama:', error);
+        throw error;
+    }
+};
 
 export default {
     getAllBooks,
     getBookById,
     updateBookStatus,
-    updateBook
+    updateBook,
+    createBook,
+    getRomantic,
+    getFiction,
+    getDrama
 }

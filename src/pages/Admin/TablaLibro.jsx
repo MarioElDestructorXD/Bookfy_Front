@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   AppBar,
   Toolbar,
@@ -23,8 +23,12 @@ const TablaLibro = () => {
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const booksData = await bookService.getAllBooks();
-        setBooks(booksData);
+        const response = await bookService.getAllBooks();
+        if (response.data && Array.isArray(response.data)) {
+          setBooks(response.data);
+        } else {
+          console.error('Formato de datos inesperado:', response);
+        }
       } catch (error) {
         console.error('Error al obtener los libros:', error);
       }
@@ -46,7 +50,7 @@ const TablaLibro = () => {
       <AppBar position="static" sx={{ width: "100%" }}>
         <Toolbar>
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            nav
+            Biblioteca
           </Typography>
         </Toolbar>
       </AppBar>
@@ -88,29 +92,37 @@ const TablaLibro = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {books.map((book) => (
-                  <TableRow key={book.id}>
-                    <TableCell>{book.id}</TableCell>
-                    <TableCell>{book.title}</TableCell>
-                    <TableCell>{book.description}</TableCell>
-                    <TableCell>{book.category}</TableCell>
-                    <TableCell>{book.author}</TableCell>
-                    <TableCell>{book.year}</TableCell>
-                    <TableCell>
-                      <Button onClick={() => handleEdit(book.id)}>
-                        <EditIcon />
-                      </Button>
-                    </TableCell>
-                    <TableCell>
-                      <Typography
-                        variant="body2"
-                        color={book.status === "Activo" ? "green" : "red"}
-                      >
-                        {book.status}
-                      </Typography>
+                {books.length > 0 ? (
+                  books.map((book) => (
+                    <TableRow key={book.id_book}>
+                      <TableCell>{book.id_book}</TableCell>
+                      <TableCell>{book.title}</TableCell>
+                      <TableCell>{book.description}</TableCell>
+                      <TableCell>{book.gener}</TableCell>
+                      <TableCell>{book.author}</TableCell>
+                      <TableCell>{book.year}</TableCell>
+                      <TableCell>
+                        <Button onClick={() => handleEdit(book.id_book)}>
+                          <EditIcon />
+                        </Button>
+                      </TableCell>
+                      <TableCell>
+                        <Typography
+                          variant="body2"
+                          color={book.status === 1 ? "green" : "red"}
+                        >
+                          {book.status === 1 ? "Activo" : "Inactivo"}
+                        </Typography>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={8} align="center">
+                      No hay libros disponibles
                     </TableCell>
                   </TableRow>
-                ))}
+                )}
               </TableBody>
             </Table>
           </TableContainer>

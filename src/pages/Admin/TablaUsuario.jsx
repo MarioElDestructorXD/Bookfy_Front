@@ -13,29 +13,74 @@ import {
   Paper,
   Button,
   Box,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
+import userService from '../../shared/service/Users'; 
+import Swal from "sweetalert2";
 
 const TablaUsuario = () => {
-  const [books, setBooks] = useState([
+  const [users, setUsers] = useState([
     {
       id: 1,
-      nombre: "Sheila",
-      apellido: "Flores",
-      correo: "chiiif1123@gmail.com",
-      telefono: "7772274584",
-      rol: "lector",
-      libros: "corazon de tinta",
+      name: "Sheila",
+      lastname: "Flores",
+      second_lastname: "Flores",
+      email: "chiiif1123@gmail.com",
+      phone_number: "7772274584",
       status: "Activo",
     },
   ]);
+
+  const [open, setOpen] = useState(false);
+  const [newUser, setNewUser] = useState({
+    email: "",
+    name: "",
+    lastname: "",
+    second_lastname: "",
+    phone_number: ""
+  });
 
   const handleEdit = (id) => {
     console.log("Editar usuario con ID:", id);
   };
 
   const handleCreate = () => {
-    console.log("Crear nuevo usuario");
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setNewUser((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const response = await userService.registerUser(newUser);
+      Swal.fire({
+        icon: 'success',
+        title: 'Usuario agregado',
+        text: 'El usuario se ha agregado exitosamente.',
+      });
+    } catch (error) {
+      console.error("Error al agregar el usuario:", error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Hubo un problema al agregar el usuario. Intenta nuevamente.',
+      });
+    }
   };
 
   return (
@@ -77,35 +122,33 @@ const TablaUsuario = () => {
                   <TableCell>#</TableCell>
                   <TableCell>Nombre</TableCell>
                   <TableCell>Apellido</TableCell>
+                  <TableCell>Segundo Apellido</TableCell>
                   <TableCell>Correo</TableCell>
                   <TableCell>Teléfono</TableCell>
-                  <TableCell>Rol</TableCell>
-                  <TableCell>Libros</TableCell>
                   <TableCell>Editar</TableCell>
                   <TableCell>Estado</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {books.map((book) => (
-                  <TableRow key={book.id}>
-                    <TableCell>{book.id}</TableCell>
-                    <TableCell>{book.nombre}</TableCell>
-                    <TableCell>{book.apellido}</TableCell>
-                    <TableCell>{book.correo}</TableCell>
-                    <TableCell>{book.telefono}</TableCell>
-                    <TableCell>{book.rol}</TableCell>
-                    <TableCell>{book.libros}</TableCell>
+                {users.map((u) => (
+                  <TableRow key={u.id}>
+                    <TableCell>{u.id}</TableCell>
+                    <TableCell>{u.name}</TableCell>
+                    <TableCell>{u.lastname}</TableCell>
+                    <TableCell>{u.second_lastname}</TableCell>
+                    <TableCell>{u.email}</TableCell>
+                    <TableCell>{u.phone_number}</TableCell>
                     <TableCell>
-                      <Button onClick={() => handleEdit(book.id)}>
+                      <Button onClick={() => handleEdit(u.id)}>
                         <EditIcon />
                       </Button>
                     </TableCell>
                     <TableCell>
                       <Typography
                         variant="body2"
-                        color={book.status === "Activo" ? "green" : "red"}
+                        color={u.status === "Activo" ? "green" : "red"}
                       >
-                        {book.status}
+                        {u.status}
                       </Typography>
                     </TableCell>
                   </TableRow>
@@ -115,6 +158,59 @@ const TablaUsuario = () => {
           </TableContainer>
         </Paper>
       </Container>
+
+      {/* Modal para agregar usuario */}
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Agregar Usuario</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Nombre"
+            fullWidth
+            name="name"
+            value={newUser.name}
+            onChange={handleChange}
+          />
+          <TextField
+            margin="dense"
+            label="Apellido"
+            fullWidth
+            name="lastname"
+            value={newUser.lastname}
+            onChange={handleChange}
+          />
+          <TextField
+            margin="dense"
+            label="Segundo Apellido"
+            fullWidth
+            name="second_lastname"
+            value={newUser.second_lastname}
+            onChange={handleChange}
+          />
+          <TextField
+            margin="dense"
+            label="Correo"
+            fullWidth
+            name="email"
+            type="email"
+            value={newUser.email}
+            onChange={handleChange}
+          />
+          <TextField
+            margin="dense"
+            label="Teléfono"
+            fullWidth
+            name="phone_number"
+            value={newUser.phone_number}
+            onChange={handleChange}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancelar</Button>
+          <Button onClick={handleSubmit}>Agregar</Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

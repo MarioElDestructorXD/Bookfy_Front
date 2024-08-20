@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const url = `http://${userApi}.execute-api.${AWS}.amazonaws.com/Prod/getAll/`;
+const url = `https://zxpkqkebn8.execute-api.us-east-1.amazonaws.com/Prod/`;
 
 const getAllUsers = async () => {
     try {
@@ -59,18 +59,19 @@ const registerUser = async (userData) => {
                 'Content-Type': 'application/json'
             }
         });
+        console.log('Respuesta del servidor:', response);
         if (response.status === 200) {
-            const data = response.data;
-            if (data.statusCode === 200) {
-                console.log('Usuario registrado correctamente:', data.message);
+            const { statusCode, message } = response.data;
+            if (statusCode === 200) {
+                console.log('Usuario registrado correctamente:', message);
             } else {
-                throw new Error(data.message);
+                throw new Error(message);
             }
         } else {
             throw new Error('Error al obtener la respuesta del servidor');
         }
     } catch (error) {
-        console.error('Error al registrar el usuario:', error);
+        console.error('Error al registrar el usuario:', error.message);
     }
 };
 
