@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const url = `https://zxpkqkebn8.execute-api.us-east-1.amazonaws.com/Prod/`;
+const url = `https://4m6bq3th5d.execute-api.us-east-1.amazonaws.com/Prod/`;
 
 const getAllUsers = async () => {
     try {

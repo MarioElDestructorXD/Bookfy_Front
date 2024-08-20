@@ -1,21 +1,25 @@
-// PDFViewer.js
 import React from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
-import 'pdfjs-dist/build/pdf.worker.min.js';  // Importa el trabajador
-
-// Configura la opción del trabajador
-pdfjs.GlobalWorkerOptions.workerSrc = '/path/to/pdf.worker.min.js';
 
 const PDFViewer = () => {
-    const pdfUrl = "https://bookify-files.s3.amazonaws.com/pdf_book/9383e1b1-569b-49f9-b1e2-ec22e2bddcc4.pdf"
+  const pdfUrl = 'https://res.cloudinary.com/db5zuwucd/image/upload/v1724157933/pdfbook/gw34xkdlrpqw2s0cigic.pdf';
+  const fileName = 'libro.pdf';
+
+  const handleDownload = () => {
+    const link = document.createElement('a');
+    link.href = pdfUrl;
+    link.download = fileName; // Nombre del archivo cuando se descargue
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div>
-      <Document
-        file={pdfUrl}
-        onLoadError={console.error}
-      >
-        <Page pageNumber={1} />
-      </Document>
+      <h1>Descargar PDF</h1>
+      <button onClick={handleDownload}>
+        Descargar PDF
+      </button>
     </div>
   );
 };

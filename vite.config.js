@@ -6,9 +6,7 @@ export default defineConfig({
   plugins: [react()],
   optimizeDeps: {
     include: [
-      "@mui/material/Box",
-      "pdfjs-dist/build/pdf",
-      "pdfjs-dist/build/pdf.worker.entry"
+      "@mui/material/Box"
     ],
- },
+  },
 })

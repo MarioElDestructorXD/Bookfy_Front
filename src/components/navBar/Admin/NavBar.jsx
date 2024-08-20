@@ -78,7 +78,7 @@ export default function NavBar() {
                   variant="h6"
                   sx={{ cursor: "pointer", textAlign: "center" }}
                 >
-                  Bookfy
+                  Bookify
                 </Typography>
               </Button>
             </Box>
@@ -91,7 +91,7 @@ export default function NavBar() {
               }}
             >
               <NavLink
-                to="/tablaUsuario"
+                to="admin/tablaUsuario"
                 style={({ isActive }) => ({
                   marginRight: "16px",
                   display: "flex",
@@ -110,7 +110,7 @@ export default function NavBar() {
                 </Typography>
               </NavLink>
               <NavLink
-                to="/tablaLibros"
+                to="admin/tablaLibro"
                 style={({ isActive }) => ({
                   marginRight: "16px",
                   display: "flex",

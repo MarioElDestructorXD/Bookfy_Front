@@ -27,10 +27,14 @@ import EditIcon from "@mui/icons-material/Edit";
 import userService from '../../shared/service/Users';
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import Load from '../../shared/plugins/Load'
+
 
 const MySwal = withReactContent(Swal);
 
 export default function TablaUsuario() {
+  const [loading, setLoading] = useState(true);
+
   const [users, setUsers] = useState([
     {
       id_user: 1,

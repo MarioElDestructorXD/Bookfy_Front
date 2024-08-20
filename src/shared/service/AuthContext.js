@@ -1,6 +1,5 @@
 import axios from "axios";
-
-const url = 'https://jip98roae5.execute-api.us-east-1.amazonaws.com/Prod/'
+const url = 'https://hiusjw9flc.execute-api.us-east-1.amazonaws.com/Prod/'
 
 const signUp = async (userDetails) => {
     try {
@@ -35,6 +34,10 @@ const login = async (email, password) => {
         if (response.status === 200) {
             const data = response.data;
             console.log('Tokens:', data);
+            localStorage.setItem('id_token', data.id_token);
+            localStorage.setItem('access_token', data.access_token);
+            localStorage.setItem('refresh_token', data.refresh_token);
+            localStorage.setItem('role', data.role);
             return data;
         } else {
             console.error('Error en la respuesta del servidor');

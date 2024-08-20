@@ -1,16 +1,16 @@
-import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "../AuthContext";
+// AdminRoute.jsx
+import { Routes, Route } from "react-router-dom";
+import AdminNavBar from '../components/navBar/Admin/NavBar';
+import TablaLibro from "../pages/Admin/TablaLibro";
+import TablaUsuario from "../pages/Admin/TablaUsuario";
 
 export default function AdminRoute() {
-  const { isAuthenticated, isAdmin, loading } = useAuth();
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!isAuthenticated || !isAdmin) {
-    return <Navigate to="/unauthorized" />; // Redirigir a una página de acceso denegado
-  }
-
-  return <Outlet />;
+  return (
+    <>
+      <Routes>
+        <Route path="tablaLibro" element={<TablaLibro />} />
+        <Route path="tablaUsuario" element={<TablaUsuario />} />
+      </Routes>
+    </>
+  );
 }

@@ -16,9 +16,11 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import bookService from '../../shared/service/Book'
+import Load from '../../shared/plugins/Load'
 
 const TablaLibro = () => {
   const [books, setBooks] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -31,6 +33,8 @@ const TablaLibro = () => {
         }
       } catch (error) {
         console.error('Error al obtener los libros:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -45,15 +49,16 @@ const TablaLibro = () => {
     console.log("Crear nuevo libro");
   };
 
+  if (loading) {
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+        <Load />
+      </Box>
+    );
+  }
+
   return (
     <>
-      <AppBar position="static" sx={{ width: "100%" }}>
-        <Toolbar>
-          <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            Biblioteca
-          </Typography>
-        </Toolbar>
-      </AppBar>
       <Container
         maxWidth={false}
         sx={{

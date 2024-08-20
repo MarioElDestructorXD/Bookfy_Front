@@ -12,48 +12,61 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { NavLink, useNavigate } from "react-router-dom";
 import Logo from "../../assets/images/user.png";
-import authService from '../../shared/service/AuthContext'
 import Swal from 'sweetalert2';
-
+import { jwtDecode } from 'jwt-decode';
+import { useAuth } from '../../AuthContext'
 
 export default function Login() {
 
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { login } = useAuth(); // Usar el hook para obtener la función de inicio de sesión
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-        const loginResponse = await authService.login(email, password);
-        if (loginResponse) {
-            Swal.fire({
-                position: "center",
-                icon: "success",
-                title: "Inicio de sesión exitoso",
-                showConfirmButton: false,
-                timer: 1500,
-            });
-        } else {
-            Swal.fire({
-                position: "center",
-                icon: "error",
-                title: "Error al iniciar sesión",
-                text: "Correo o contraseña incorrectos",
-                showConfirmButton: true,
-            });
-        }
-    } catch (error) {
+      const loginResponse = await login(email, password); // Llamar a la función de inicio de sesión del contexto
+      if (loginResponse) {
         Swal.fire({
-            position: "center",
-            icon: "error",
-            title: "Error al iniciar sesión",
-            text: error.message,
-            showConfirmButton: true,
+          position: "center",
+          icon: "success",
+          title: "Inicio de sesión exitoso",
+          showConfirmButton: false,
+          timer: 1500,
         });
+
+        const userRole = localStorage.getItem('role'); 
+
+        if (userRole === 'Admins') {
+          navigate('/admin/');
+        } else if (userRole === 'Clients') {
+          navigate('/client/');
+        } else {
+          navigate('/login'); 
+        }
+      } else {
+        Swal.fire({
+          position: "center",
+          icon: "error",
+          title: "Error al iniciar sesión",
+          text: "Correo o contraseña incorrectos",
+          showConfirmButton: true,
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Error al iniciar sesión",
+        text: error.message,
+        showConfirmButton: true,
+      });
     }
-};
+  };
+
+  
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
