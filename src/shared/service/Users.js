@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const url = `https://rq4i3atzeh.execute-api.us-east-1.amazonaws.com/Prod/`;
+const url = `https://xbwpllxnhj.execute-api.us-east-1.amazonaws.com/Prod/`;
 
 const getAllUsers = async () => {
     try {
@@ -30,24 +30,22 @@ const getUserById = async (id) => {
 
 const registerUser = async (userData) => {
     try {
-        const response = await axios.post(`${url}insert_user`, userData, {
+        const response = await axios.post('https://xbwpllxnhj.execute-api.us-east-1.amazonaws.com/Prod/insert_user', userData, {
             headers: {
                 'Content-Type': 'application/json'
             }
         });
+        
         console.log('Respuesta del servidor:', response);
+
         if (response.status === 200) {
-            const { statusCode, message } = response.data;
-            if (statusCode === 200) {
-                console.log('Usuario registrado correctamente:', message);
-            } else {
-                throw new Error(message);
-            }
+            const { message } = response.data;
+            console.log('Usuario registrado correctamente:', message);
         } else {
             throw new Error('Error al obtener la respuesta del servidor');
         }
     } catch (error) {
-        console.error('Error al registrar el usuario:', error.message);
+        console.error('Error al registrar el usuario:', error.response?.data?.message || error.message);
     }
 };
 

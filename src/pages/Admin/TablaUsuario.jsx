@@ -40,12 +40,12 @@ export default function TablaUsuario() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const token = localStorage.getItem("id_token"); // Ajusta según tu método de almacenamiento
-        const decodedToken = jwtDecode(token); 
+        const token = localStorage.getItem("id_token");
+        const decodedToken = jwtDecode(token);
         const email = decodedToken.email;
         if (!email) {
-            console.error('No se pudo obtener el correo electrónico del token.');
-            return;
+          console.error('No se pudo obtener el correo electrónico del token.');
+          return;
         }
         setAuthenticatedUserEmail(email);
 
@@ -68,17 +68,16 @@ export default function TablaUsuario() {
     };
     fetchUsers();
   }, []);
-  
 
   const [openAddDialog, setOpenAddDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [newUser, setNewUser] = useState({
+    email: "",
+    phone_number: "",  // Correct field name
     name: "",
     lastname: "",
     second_lastname: "",
-    email: "",
-    phone: "",
     id_rol: 1,
   });
 
@@ -90,7 +89,7 @@ export default function TablaUsuario() {
     setOpenAddDialog(false);
   };
 
-  const handleAddUser = () => {
+  const handleAddUser = async () => {
     setOpenAddDialog(false);
 
     MySwal.fire({
@@ -102,27 +101,37 @@ export default function TablaUsuario() {
       cancelButtonColor: "#ff0000",
       confirmButtonText: "Sí, agregar",
       cancelButtonText: "Cancelar",
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        setUsers([
-          ...users,
-          { ...newUser, id_user: users.length + 1, status: true },
-        ]);
-        setNewUser({
-          name: "",
-          lastname: "",
-          second_lastname: "",
-          email: "",
-          phone: "",
-          id_rol: 1,
-        });
+        try {
+          const addedUser = await userService.registerUser(newUser);
+          setUsers([
+            ...users,
+            { ...addedUser, id_user: users.length + 1, status: true },
+          ]);
+          setNewUser({
+            email: "",
+            name: "",
+            lastname: "",
+            second_lastname: "",
+            phone_number: "",  // Correct field name
+            id_rol: 1,
+          });
 
-        MySwal.fire({
-          title: "Usuario Agregado!",
-          text: "El nuevo usuario ha sido agregado exitosamente.",
-          icon: "success",
-          confirmButtonColor: "#1F2D40",
-        });
+          MySwal.fire({
+            title: "Usuario Agregado!",
+            text: "El nuevo usuario ha sido agregado exitosamente.",
+            icon: "success",
+            confirmButtonColor: "#1F2D40",
+          });
+        } catch (error) {
+          MySwal.fire({
+            title: "Error",
+            text: "Hubo un error al agregar el usuario.",
+            icon: "error",
+            confirmButtonColor: "#1F2D40",
+          });
+        }
       }
     });
   };
@@ -281,7 +290,7 @@ export default function TablaUsuario() {
                     <TableCell>{user.phone}</TableCell>
                     <TableCell>{user.status ? "Activo" : "Inactivo"}</TableCell>
                     <TableCell>
-                    <IconButton
+                      <IconButton
                         onClick={() => handleClickOpenEdit(user)}
                         disabled={isEditDisabled(user.email)}
                       >
@@ -304,36 +313,8 @@ export default function TablaUsuario() {
         <DialogTitle>Agregar Usuario</DialogTitle>
         <DialogContent>
           <TextField
-            autoFocus
             margin="dense"
-            label="Nombre"
-            name="name"
-            type="text"
-            fullWidth
-            value={newUser.name}
-            onChange={handleChange}
-          />
-          <TextField
-            margin="dense"
-            label="Apellido Paterno"
-            name="lastname"
-            type="text"
-            fullWidth
-            value={newUser.lastname}
-            onChange={handleChange}
-          />
-          <TextField
-            margin="dense"
-            label="Apellido Materno"
-            name="second_lastname"
-            type="text"
-            fullWidth
-            value={newUser.second_lastname}
-            onChange={handleChange}
-          />
-          <TextField
-            margin="dense"
-            label="Correo"
+            label="Email"
             name="email"
             type="email"
             fullWidth
@@ -343,58 +324,60 @@ export default function TablaUsuario() {
           <TextField
             margin="dense"
             label="Teléfono"
-            name="phone"
-            type="text"
+            name="phone_number"  // Correct field name
+            type="tel"  // 'tel' is more appropriate for phone numbers
             fullWidth
-            value={newUser.phone}
+            value={newUser.phone_number}
             onChange={handleChange}
           />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseAdd} color="primary">
-            Cancelar
-          </Button>
-          <Button onClick={handleAddUser} color="primary">
-            Agregar
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* Dialogo de Editar Usuario */}
-      <Dialog open={openEditDialog} onClose={handleCloseEdit}>
-        <DialogTitle>Editar Usuario</DialogTitle>
-        <DialogContent>
           <TextField
-            autoFocus
             margin="dense"
             label="Nombre"
             name="name"
-            type="text"
             fullWidth
-            value={currentUser?.name || ""}
+            value={newUser.name}
             onChange={handleChange}
           />
           <TextField
             margin="dense"
             label="Apellido Paterno"
             name="lastname"
-            type="text"
             fullWidth
-            value={currentUser?.lastname || ""}
+            value={newUser.lastname}
             onChange={handleChange}
           />
           <TextField
             margin="dense"
             label="Apellido Materno"
             name="second_lastname"
-            type="text"
             fullWidth
-            value={currentUser?.second_lastname || ""}
+            value={newUser.second_lastname}
             onChange={handleChange}
           />
+          <FormControl fullWidth margin="dense">
+            <InputLabel>Rol</InputLabel>
+            <Select
+              name="id_rol"
+              value={newUser.id_rol}
+              onChange={handleChange}
+            >
+              <MenuItem value={1}>Admin</MenuItem>
+            </Select>
+          </FormControl>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseAdd}>Cancelar</Button>
+          <Button onClick={handleAddUser}>Agregar</Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Edit User Dialog */}
+      <Dialog open={openEditDialog} onClose={handleCloseEdit}>
+        <DialogTitle>Editar Usuario</DialogTitle>
+        <DialogContent>
           <TextField
             margin="dense"
-            label="Correo"
+            label="Email"
             name="email"
             type="email"
             fullWidth
@@ -404,32 +387,51 @@ export default function TablaUsuario() {
           <TextField
             margin="dense"
             label="Teléfono"
-            name="phone"
-            type="text"
+            name="phone_number"  // Correct field name
+            type="tel"  // 'tel' is more appropriate for phone numbers
             fullWidth
-            value={currentUser?.phone || ""}
+            value={currentUser?.phone_number || ""}
+            onChange={handleChange}
+          />
+          <TextField
+            margin="dense"
+            label="Nombre"
+            name="name"
+            fullWidth
+            value={currentUser?.name || ""}
+            onChange={handleChange}
+          />
+          <TextField
+            margin="dense"
+            label="Apellido Paterno"
+            name="lastname"
+            fullWidth
+            value={currentUser?.lastname || ""}
+            onChange={handleChange}
+          />
+          <TextField
+            margin="dense"
+            label="Apellido Materno"
+            name="second_lastname"
+            fullWidth
+            value={currentUser?.second_lastname || ""}
             onChange={handleChange}
           />
           <FormControl fullWidth margin="dense">
             <InputLabel>Rol</InputLabel>
             <Select
-              value={currentUser?.id_rol || 1}
               name="id_rol"
+              value={currentUser?.id_rol || 1}
               onChange={handleChange}
-              label="Rol"
             >
               <MenuItem value={1}>Cliente</MenuItem>
-              <MenuItem value={2}>Administrador</MenuItem>
+              <MenuItem value={2}>Admin</MenuItem>
             </Select>
           </FormControl>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseEdit} color="primary">
-            Cancelar
-          </Button>
-          <Button onClick={handleUpdateUser} color="primary">
-            Actualizar
-          </Button>
+          <Button onClick={handleCloseEdit}>Cancelar</Button>
+          <Button onClick={handleUpdateUser}>Actualizar</Button>
         </DialogActions>
       </Dialog>
     </>

@@ -22,7 +22,7 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { jwtDecode } from 'jwt-decode';
 import authService from '../../shared/service/AuthContext';
-import userService from '../../shared/service/UserService';
+import userService from '../../shared/service/Users';
 
 const MySwal = withReactContent(Swal);
 
