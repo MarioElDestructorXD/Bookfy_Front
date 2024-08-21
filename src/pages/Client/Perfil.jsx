@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Card,
@@ -20,32 +20,68 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import { jwtDecode } from 'jwt-decode';
+import authService from '../../shared/service/AuthContext';
 
 const MySwal = withReactContent(Swal);
 
 export default function Perfil() {
   const [datos, setDatos] = useState({
-    nombre: "Mario",
-    apellido: "Rodriguez",
-    segundoApellido: "Gonzalez",
-    correo: "mario00504@gmail.com",
-    telefono: "1234567890",
-    rol: "1", // ejemplo de ID de rol
-    contraseña: "*************",
+    id_user: "",
+    name: "",
+    lastname: "",
+    second_lastname: "",
+    email: "",
+    phone: "",
+    id_rol: "",
+    status: true,
+  });
+
+  const [formData, setFormData] = useState({
+    name: "",
+    lastname: "",
+    second_lastname: "",
+    email: "",
+    phone: "",
+    id_rol: "",
+    password: "",
   });
 
   const [open, setOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    nombre: datos.nombre,
-    apellido: datos.apellido,
-    segundoApellido: datos.segundoApellido,
-    correo: datos.correo,
-    telefono: datos.telefono,
-    rol: datos.rol,
-    contraseña: datos.contraseña,
-  });
-
   const [showPassword, setShowPassword] = useState(false);
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const accessToken = localStorage.getItem('access_token');
+        if (accessToken) {
+          const decodedToken = jwtDecode(accessToken);
+          const email = decodedToken.email;
+          if (email) {
+            const userData = await getUserByEmail(email);
+            setDatos(userData);
+            setFormData({
+              name: userData.name,
+              lastname: userData.lastname,
+              second_lastname: userData.second_lastname,
+              email: userData.email,
+              phone: userData.phone,
+              id_rol: userData.id_rol,
+              password: "", // Contraseña no se debe mostrar ni actualizar directamente
+            });
+          } else {
+            console.error('No se pudo obtener el correo electrónico del token.');
+          }
+        } else {
+          console.error('No hay token de acceso disponible.');
+        }
+      } catch (error) {
+        console.error('Error al obtener el perfil del usuario:', error);
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
 
   const handleEditClick = () => {
     setOpen(true);
@@ -73,13 +109,14 @@ export default function Perfil() {
     if (result.isConfirmed) {
       // Actualiza los datos con los valores editados
       setDatos({
-        nombre: formData.nombre,
-        apellido: formData.apellido,
-        segundoApellido: formData.segundoApellido,
-        correo: formData.correo,
-        telefono: formData.telefono,
-        rol: formData.rol,
-        contraseña: formData.contraseña,
+        ...datos,
+        name: formData.name,
+        lastname: formData.lastname,
+        second_lastname: formData.second_lastname,
+        email: formData.email,
+        phone: formData.phone,
+        id_rol: formData.id_rol,
+        // No se actualiza el campo 'status'
       });
 
       // Muestra un mensaje de éxito
@@ -153,7 +190,7 @@ export default function Perfil() {
               Nombre
             </Typography>
             <Typography variant="body2" sx={{ color: "text.secondary" }}>
-              {datos.nombre} {datos.apellido} {datos.segundoApellido}
+              {datos.name} {datos.lastname} {datos.second_lastname}
             </Typography>
           </Box>
           <Box display="flex" justifyContent="space-between">
@@ -164,7 +201,7 @@ export default function Perfil() {
               Correo Electrónico
             </Typography>
             <Typography variant="body2" sx={{ color: "text.secondary" }}>
-              {datos.correo}
+              {datos.email}
             </Typography>
           </Box>
           <Box display="flex" justifyContent="space-between">
@@ -175,7 +212,7 @@ export default function Perfil() {
               Teléfono
             </Typography>
             <Typography variant="body2" sx={{ color: "text.secondary" }}>
-              {datos.telefono}
+              {datos.phone}
             </Typography>
           </Box>
           <Box display="flex" justifyContent="space-between">
@@ -183,10 +220,10 @@ export default function Perfil() {
               variant="body2"
               sx={{ color: "text.secondary", fontWeight: "bold" }}
             >
-              Contraseña
+              Rol
             </Typography>
             <Typography variant="body2" sx={{ color: "text.secondary" }}>
-              {"*".repeat(datos.contraseña.length)}
+              {datos.id_rol}
             </Typography>
           </Box>
         </CardContent>
@@ -206,56 +243,65 @@ export default function Perfil() {
             <TextField
               autoFocus
               margin="dense"
-              id="nombre"
+              id="name"
               label="Nombre"
               type="text"
               fullWidth
-              value={formData.nombre}
+              value={formData.name}
               onChange={handleInputChange}
             />
             <TextField
               margin="dense"
-              id="apellido"
+              id="lastname"
               label="Apellido Paterno"
               type="text"
               fullWidth
-              value={formData.apellido}
+              value={formData.lastname}
               onChange={handleInputChange}
             />
             <TextField
               margin="dense"
-              id="segundoApellido"
+              id="second_lastname"
               label="Apellido Materno"
               type="text"
               fullWidth
-              value={formData.segundoApellido}
+              value={formData.second_lastname}
               onChange={handleInputChange}
             />
             <TextField
               margin="dense"
-              id="correo"
+              id="email"
               label="Correo Electrónico"
               type="email"
               fullWidth
-              value={formData.correo}
+              value={formData.email}
               onChange={handleInputChange}
             />
             <TextField
               margin="dense"
-              id="telefono"
+              id="phone"
               label="Teléfono"
               type="text"
               fullWidth
-              value={formData.telefono}
+              value={formData.phone}
               onChange={handleInputChange}
             />
             <TextField
               margin="dense"
-              id="contraseña"
+              id="id_rol"
+              label="Rol"
+              type="text"
+              fullWidth
+              value={formData.id_rol}
+              onChange={handleInputChange}
+            />
+            <TextField
+              margin="dense"
+              id="password"
               label="Contraseña"
               type={showPassword ? "text" : "password"}
               fullWidth
-              value={formData.contraseña}
+              value={formData.password}
               onChange={handleInputChange}
               InputProps={{
                 endAdornment: (

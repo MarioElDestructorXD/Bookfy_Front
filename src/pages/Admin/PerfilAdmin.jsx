@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     Box,
     Card,
@@ -20,32 +20,69 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import { jwtDecode } from 'jwt-decode';
+import authService from '../../shared/service/AuthContext';
+import userService from '../../shared/service/UserService';
 
 const MySwal = withReactContent(Swal);
 
 export default function PerfilAdmin() {
     const [datos, setDatos] = useState({
-        nombre: "Mario",
-        apellido: "Rodriguez",
-        segundoApellido: "Gonzalez",
-        correo: "mario00504@gmail.com",
-        telefono: "1234567890",
-        rol: "1", // ejemplo de ID de rol
-        contraseña: "*************",
+        id_user: "",
+        name: "",
+        lastname: "",
+        second_lastname: "",
+        email: "",
+        phone: "",
+        id_rol: "",
+        status: true,
+    });
+
+    const [formData, setFormData] = useState({
+        name: "",
+        lastname: "",
+        second_lastname: "",
+        email: "",
+        phone: "",
+        id_rol: "",
     });
 
     const [open, setOpen] = useState(false);
-    const [formData, setFormData] = useState({
-        nombre: datos.nombre,
-        apellido: datos.apellido,
-        segundoApellido: datos.segundoApellido,
-        correo: datos.correo,
-        telefono: datos.telefono,
-        rol: datos.rol,
-        contraseña: datos.contraseña,
-    });
-
     const [showPassword, setShowPassword] = useState(false);
+
+    useEffect(() => {
+        const fetchUserProfile = async () => {
+            try {
+                const token = localStorage.getItem('id_token');
+                if (!token) {
+                    console.error('Token de acceso no disponible.');
+                    return;
+                }
+
+                const decodedToken = jwtDecode(token);
+                const email = decodedToken.email;
+                if (!email) {
+                    console.error('No se pudo obtener el correo electrónico del token.');
+                    return;
+                }
+
+                const userData = await authService.getUserByEmail(email);
+                setDatos(userData);
+                setFormData({
+                    name: userData.name,
+                    lastname: userData.lastname,
+                    second_lastname: userData.second_lastname,
+                    email: userData.email,
+                    phone: userData.phone,
+                    id_rol: userData.id_rol,
+                });
+            } catch (error) {
+                console.error('Error al obtener el perfil del usuario:', error);
+            }
+        };
+
+        fetchUserProfile();
+    }, []);
 
     const handleEditClick = () => {
         setOpen(true);
@@ -71,24 +108,35 @@ export default function PerfilAdmin() {
         });
 
         if (result.isConfirmed) {
-            // Actualiza los datos con los valores editados
-            setDatos({
-                nombre: formData.nombre,
-                apellido: formData.apellido,
-                segundoApellido: formData.segundoApellido,
-                correo: formData.correo,
-                telefono: formData.telefono,
-                rol: formData.rol,
-                contraseña: formData.contraseña,
-            });
+            try {
+                // Actualiza los datos con los valores editados
+                const updatedUser = {
+                    id_user: datos.id_user,
+                    ...formData,
+                };
+                await userService.updateUser(updatedUser);
 
-            // Muestra un mensaje de éxito
-            MySwal.fire({
-                title: "Guardado",
-                text: "Los datos han sido actualizados",
-                icon: "success",
-                confirmButtonColor: "#1F2D40",
-            });
+                // Actualiza el estado de datos con los nuevos valores
+                setDatos({
+                    ...datos,
+                    ...formData,
+                });
+
+                // Muestra un mensaje de éxito
+                MySwal.fire({
+                    title: "Guardado",
+                    text: "Los datos han sido actualizados",
+                    icon: "success",
+                    confirmButtonColor: "#1F2D40",
+                });
+            } catch (error) {
+                MySwal.fire({
+                    title: "Error",
+                    text: "No se pudieron guardar los cambios.",
+                    icon: "error",
+                    confirmButtonColor: "#1F2D40",
+                });
+            }
         }
     };
 
@@ -108,10 +156,9 @@ export default function PerfilAdmin() {
             display="flex"
             justifyContent="center"
             alignItems="center"
-            height="100vh" // Ocupa toda la altura disponible en el administrador
-            padding="20px" // Opcional: agrega padding alrededor del card
+            height="50vh" // Full height of the viewport
         >
-            <Card sx={{ width: "100%", maxWidth: "600px" }}>
+            <Card sx={{ width: "100%" }}>
                 <CardHeader
                     title="Datos Personales"
                     sx={{
@@ -154,7 +201,7 @@ export default function PerfilAdmin() {
                             Nombre
                         </Typography>
                         <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                            {datos.nombre} {datos.apellido} {datos.segundoApellido}
+                            {datos.name} {datos.lastname} {datos.second_lastname}
                         </Typography>
                     </Box>
                     <Box display="flex" justifyContent="space-between">
@@ -165,7 +212,7 @@ export default function PerfilAdmin() {
                             Correo Electrónico
                         </Typography>
                         <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                            {datos.correo}
+                            {datos.email}
                         </Typography>
                     </Box>
                     <Box display="flex" justifyContent="space-between">
@@ -176,7 +223,7 @@ export default function PerfilAdmin() {
                             Teléfono
                         </Typography>
                         <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                            {datos.telefono}
+                            {datos.phone}
                         </Typography>
                     </Box>
                     <Box display="flex" justifyContent="space-between">
@@ -184,10 +231,10 @@ export default function PerfilAdmin() {
                             variant="body2"
                             sx={{ color: "text.secondary", fontWeight: "bold" }}
                         >
-                            Contraseña
+                            Rol
                         </Typography>
                         <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                            {"*".repeat(datos.contraseña.length)}
+                            Administrador
                         </Typography>
                     </Box>
                 </CardContent>
@@ -207,56 +254,65 @@ export default function PerfilAdmin() {
                         <TextField
                             autoFocus
                             margin="dense"
-                            id="nombre"
+                            id="name"
                             label="Nombre"
                             type="text"
                             fullWidth
-                            value={formData.nombre}
+                            value={formData.name}
                             onChange={handleInputChange}
                         />
                         <TextField
                             margin="dense"
-                            id="apellido"
+                            id="lastname"
                             label="Apellido Paterno"
                             type="text"
                             fullWidth
-                            value={formData.apellido}
+                            value={formData.lastname}
                             onChange={handleInputChange}
                         />
                         <TextField
                             margin="dense"
-                            id="segundoApellido"
+                            id="second_lastname"
                             label="Apellido Materno"
                             type="text"
                             fullWidth
-                            value={formData.segundoApellido}
+                            value={formData.second_lastname}
                             onChange={handleInputChange}
                         />
                         <TextField
                             margin="dense"
-                            id="correo"
+                            id="email"
                             label="Correo Electrónico"
                             type="email"
                             fullWidth
-                            value={formData.correo}
+                            value={formData.email}
                             onChange={handleInputChange}
                         />
                         <TextField
                             margin="dense"
-                            id="telefono"
+                            id="phone"
                             label="Teléfono"
                             type="text"
                             fullWidth
-                            value={formData.telefono}
+                            value={formData.phone}
                             onChange={handleInputChange}
                         />
                         <TextField
                             margin="dense"
-                            id="contraseña"
+                            id="id_rol"
+                            label="Rol"
+                            type="text"
+                            fullWidth
+                            value={formData.id_rol}
+                            onChange={handleInputChange}
+                        />
+                        <TextField
+                            margin="dense"
+                            id="password"
                             label="Contraseña"
                             type={showPassword ? "text" : "password"}
                             fullWidth
-                            value={formData.contraseña}
+                            value={formData.password}
                             onChange={handleInputChange}
                             InputProps={{
                                 endAdornment: (
@@ -274,28 +330,10 @@ export default function PerfilAdmin() {
                         />
                     </DialogContent>
                     <DialogActions>
-                        <Button
-                            onClick={handleClose}
-                            sx={{
-                                color: "#fff",
-                                backgroundColor: "#ff0000",
-                                "&:hover": {
-                                    backgroundColor: "#ff0000",
-                                },
-                            }}
-                        >
+                        <Button onClick={handleClose} color="primary">
                             Cancelar
                         </Button>
-                        <Button
-                            onClick={handleSave}
-                            sx={{
-                                color: "#fff",
-                                backgroundColor: "#1F2D40",
-                                "&:hover": {
-                                    backgroundColor: "#1F2D40",
-                                },
-                            }}
-                        >
+                        <Button onClick={handleSave} color="primary">
                             Guardar
                         </Button>
                     </DialogActions>

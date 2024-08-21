@@ -28,16 +28,27 @@ import userService from '../../shared/service/Users';
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import Load from '../../shared/plugins/Load';
+import { jwtDecode } from 'jwt-decode';
 
 const MySwal = withReactContent(Swal);
 
 export default function TablaUsuario() {
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState([]);
+  const [authenticatedUserEmail, setAuthenticatedUserEmail] = useState("");
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
+        const token = localStorage.getItem("id_token"); // Ajusta según tu método de almacenamiento
+        const decodedToken = jwtDecode(token); 
+        const email = decodedToken.email;
+        if (!email) {
+            console.error('No se pudo obtener el correo electrónico del token.');
+            return;
+        }
+        setAuthenticatedUserEmail(email);
+
         const response = await userService.getAllUsers();
         if (response.data && Array.isArray(response.data)) {
           setUsers(response.data);
@@ -212,6 +223,8 @@ export default function TablaUsuario() {
     });
   };
 
+  const isEditDisabled = (email) => email === authenticatedUserEmail;
+
   if (loading) {
     return (
       <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
@@ -268,7 +281,10 @@ export default function TablaUsuario() {
                     <TableCell>{user.phone}</TableCell>
                     <TableCell>{user.status ? "Activo" : "Inactivo"}</TableCell>
                     <TableCell>
-                      <IconButton onClick={() => handleClickOpenEdit(user)}>
+                    <IconButton
+                        onClick={() => handleClickOpenEdit(user)}
+                        disabled={isEditDisabled(user.email)}
+                      >
                         <EditIcon />
                       </IconButton>
                       <IconButton onClick={() => handleDeleteUser(user.id_user)}>

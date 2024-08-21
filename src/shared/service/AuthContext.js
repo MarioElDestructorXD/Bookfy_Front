@@ -24,6 +24,26 @@ const signUp = async (userDetails) => {
     }
 };
 
+const getUserByEmail = async (email) => {
+    try {
+        const response = await axios.get(`${url}myProfile`, {
+            params: { email: email },
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+        if (response.status === 200) {
+            return response.data;
+        } else {
+            throw new Error('Error al obtener la respuesta del servidor');
+        }
+    } catch (error) {
+        console.error('Error al obtener el usuario:', error.message);
+        throw error;
+    }
+};
+
 const login = async (email, password) => {
     try {
         const response = await axios.post(`${url}login`, { email, password }, {
@@ -125,6 +145,7 @@ export default {
     login,
     forgotPassword,
     confirmPassword,
-    changeTemporaryPassword
+    changeTemporaryPassword,
+    getUserByEmail
 }
 
