@@ -33,8 +33,8 @@ export default function NavListDrawer({ NavLink, setOpen }) {
     </Box>
   );
 }
+
 NavListDrawer.propTypes = {
   setOpen: PropTypes.func.isRequired,
-  NavLink: PropTypes.elementType.isRequired,
+  NavLink: PropTypes.elementType.isRequired, 
 };
-

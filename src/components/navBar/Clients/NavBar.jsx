@@ -16,6 +16,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import { NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../../../AuthContext";
 
 import NavListDrawer from "./NavListDrawer";
 
@@ -61,7 +62,7 @@ export default function NavBar({ }) {
                                     variant="h6"
                                     sx={{ cursor: "pointer", textAlign: "center" }}
                                 >
-                                    Bookfy
+                                    Bookify
                                 </Typography>
                             </Button>
                         </Box>
@@ -141,7 +142,7 @@ export default function NavBar({ }) {
                     >
                         <CardContent>
                             <Typography variant="h5" color="textPrimary" fontWeight="bold">
-                                BOOKFY
+                                BOOKIFY
                             </Typography>
                         </CardContent>
                     </Card>

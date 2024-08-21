@@ -66,7 +66,6 @@ export default function Login() {
     }
   };
 
-  
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -170,6 +169,16 @@ export default function Login() {
             >
               <NavLink to="/register" variant="body2">
                 ¿No tienes cuenta? Regístrate
+              </NavLink>
+            </Box>
+            <Box
+              sx={{
+                mt: 1,
+                textAlign: "center",
+              }}
+            >
+              <NavLink to="/changePassword" variant="body2">
+                Cambiar contraseña temporal
               </NavLink>
             </Box>
           </form>

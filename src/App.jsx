@@ -15,12 +15,13 @@ import ClientRoute from "./Routers/ClientRoute";
 import Unauthorized from "./pages/Errors/Unauthorized"; 
 import Catalogue from "./pages/Clients/Catalogue"
 import { useAuth } from './AuthContext';
+import ChancePassword from './pages/Clients/ChancePassword';
+
 
 export default function App() {
   const { isAuthenticated, userRole } = useAuth();
   const location = useLocation();
 
-  // Decidir qué Navbar mostrar
   const renderNavBar = () => {
     if (isAuthenticated) {
       if (userRole === 'Admins') {
@@ -43,6 +44,7 @@ export default function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/resetPassword" element={<ResetPassword />} />
           <Route path="/updatePassword" element={<UpdatePassword />} />
+          <Route path="/changePassword" element={<ChancePassword />} />
           <Route path="/admin/*" element={<AdminRoute />} />
           <Route path="/client/*" element={<ClientRoute />} />
           <Route path="/500" element={<ServerError />} />

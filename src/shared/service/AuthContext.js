@@ -1,5 +1,5 @@
 import axios from "axios";
-const url = 'https://hiusjw9flc.execute-api.us-east-1.amazonaws.com/Prod/'
+const url = 'https://q1pto6a9y2.execute-api.us-east-1.amazonaws.com/Prod/'
 
 const signUp = async (userDetails) => {
     try {
@@ -95,12 +95,36 @@ const confirmPassword = async (email, confirmationCode, newPassword) => {
     }
 };
 
+export const changeTemporaryPassword = async (email, temporaryPassword, newPassword) => {
+    try {
+        const response = await axios.post(`${url}change_temporary`, {
+            email,
+            temporary_password: temporaryPassword,
+            new_password: newPassword
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        return response.data; 
+    } catch (error) {
+        if (error.response) {
+            console.error('Error en la respuesta:', error.response.data);
+        } else if (error.request) {
+            console.error('Error en la solicitud:', error.request);
+        } else {
+            console.error('Error:', error.message);
+        }
+        throw error; 
+    }
+};
 
 
 export default {
     signUp,
     login,
     forgotPassword,
-    confirmPassword
+    confirmPassword,
+    changeTemporaryPassword
 }
 

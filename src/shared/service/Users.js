@@ -1,53 +1,27 @@
 import axios from "axios";
 
-const url = `https://4m6bq3th5d.execute-api.us-east-1.amazonaws.com/Prod/`;
+const url = `https://rq4i3atzeh.execute-api.us-east-1.amazonaws.com/Prod/`;
 
 const getAllUsers = async () => {
-    const token = localStorage.getItem('access_token'); // Obtén el token del almacenamiento local
-    if (!token) {
-        throw new Error('Token de acceso no disponible');
-    }
     try {
-        const response = await axios.get(`${url}getAll`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-        if (response.status === 200) {
-            const data = response.data;
-            if (data.statusCode === 200) {
-                return data.data;
-            } else {
-                throw new Error(data.message);
-            }
-        } else {
-            throw new Error('Error al obtener la respuesta del servidor');
-        }
+        const response = await axios.get(`${url}getAll`);
+        console.log('Usuarios obtenidos:', response.data);
+        return response.data;
     } catch (error) {
         console.error('Error al obtener usuarios:', error);
         throw error;
     }
 };
 
-const getUserById = async (id_user) => {
+const getUserById = async (id) => {
     try {
-        const token = 'YOUR_AUTH_TOKEN'; // Reemplaza con el token adecuado
-        const response = await axios.get(`${url}getUser`, {
-            params: { id_user },
-            headers: {
-                'Authorization': `Bearer ${token}`
+        const response = await axios.get(`${url}get`, {
+            params: {
+                id_user: id
             }
         });
-        if (response.status === 200) {
-            const data = response.data;
-            if (data.statusCode === 200) {
-                return data.data;
-            } else {
-                throw new Error(data.message);
-            }
-        } else {
-            throw new Error('Error al obtener la respuesta del servidor');
-        }
+        console.log('Información del usuario:', response.data);
+        return response.data;
     } catch (error) {
         console.error('Error al obtener el usuario:', error);
         throw error;
@@ -77,54 +51,29 @@ const registerUser = async (userData) => {
     }
 };
 
-const updateUserStatus = async (userId, status) => {
+const updateUserStatus = async (id, status) => {
     try {
-        const response = await axios.post(`${url}updateStatus`, {
-            id_user: userId,
+        const response = await axios.patch(`${url}updateStatus`, {
+            id_user: id,
             status: status
-        }, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer YOUR_AUTH_TOKEN'
-            }
         });
-
-        if (response.status === 200) {
-            const data = response.data;
-            if (data.statusCode === 200) {
-                console.log('Estado del usuario actualizado correctamente:', data.message);
-            } else {
-                throw new Error(data.message);
-            }
-        } else {
-            throw new Error('Error al obtener la respuesta del servidor');
-        }
+        
+        console.log('Respuesta al actualizar el estado:', response.data);
+        return response.data;
     } catch (error) {
         console.error('Error al actualizar el estado del usuario:', error);
+        throw error;
     }
 };
 
 const updateUser = async (userData) => {
     try {
-        const response = await axios.post(url, userData, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer YOUR_AUTH_TOKEN' // Reemplaza con el token adecuado
-            }
-        });
-
-        if (response.status === 200) {
-            const data = response.data;
-            if (data.statusCode === 200) {
-                console.log('Usuario actualizado correctamente:', data.message);
-            } else {
-                throw new Error(data.message);
-            }
-        } else {
-            throw new Error('Error al obtener la respuesta del servidor');
-        }
+        const response = await axios.put(`${url}update_user`, userData);        
+        console.log('Respuesta al actualizar el usuario:', response.data);
+        return response.data;
     } catch (error) {
         console.error('Error al actualizar el usuario:', error);
+        throw error;
     }
 };
 

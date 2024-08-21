@@ -32,19 +32,19 @@ export default function HomeUser() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchBooks = async () => {
-      try {
-        const response = await bookService.getAllBooks();
-        setBooks(response.data);
-        console.log(response.data);
-      } catch (error) {
-        console.error('Error al obtener los libros:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchBooks = async () => {
+    setLoading(true);
+    try {
+      const data = await bookService.getAllBooks();
+      setBooks(data);
+    } catch (error) {
+      console.error('Error al obtener los libros:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchBooks();
   }, []);
 
@@ -92,8 +92,16 @@ export default function HomeUser() {
             </Typography>
             <button
               onClick={() => {
-                navigate("/reading", { state: { bookId: book.id_book } });
-                MySwal.close();
+                MySwal.fire({
+                  title: 'Descargando libro...',
+                  text: 'Tu libro está en proceso de descarga.',
+                  icon: 'info',
+                  showConfirmButton: false,
+                  timer: 2000, // Duración de la alerta en milisegundos
+                  willClose: () => {
+                    window.open(book.pdf_url, '_blank'); // Abre el PDF en una nueva pestaña
+                  }
+                });
               }}
               style={{
                 marginTop: "20px",

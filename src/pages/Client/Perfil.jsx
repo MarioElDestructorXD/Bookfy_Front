@@ -104,195 +104,202 @@ export default function Perfil() {
   };
 
   return (
-    <Card>
-      <CardHeader
-        title="Datos Personales"
-        sx={{
-          padding: 2,
-          backgroundColor: "#1F2D40",
-          color: "#fff",
-          fontWeight: "bold",
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-        action={
-          <Button
-            variant="contained"
-            sx={{
-              backgroundColor: "#fff",
-              color: "#000",
-              marginRight: 2,
-            }}
-            startIcon={<EditIcon />}
-            onClick={handleEditClick}
-          >
-            Editar Datos
-          </Button>
-        }
-      />
-      <Divider />
-      <CardContent
-        sx={{
-          padding: 2,
-          display: "flex",
-          flexDirection: "column",
-          gap: 2,
-        }}
-      >
-        <Box display="flex" justifyContent="space-between">
-          <Typography
-            variant="body2"
-            sx={{ color: "text.secondary", fontWeight: "bold" }}
-          >
-            Nombre
-          </Typography>
-          <Typography variant="body2" sx={{ color: "text.secondary" }}>
-            {datos.nombre} {datos.apellido} {datos.segundoApellido}
-          </Typography>
-        </Box>
-        <Box display="flex" justifyContent="space-between">
-          <Typography
-            variant="body2"
-            sx={{ color: "text.secondary", fontWeight: "bold" }}
-          >
-            Correo Electrónico
-          </Typography>
-          <Typography variant="body2" sx={{ color: "text.secondary" }}>
-            {datos.correo}
-          </Typography>
-        </Box>
-        <Box display="flex" justifyContent="space-between">
-          <Typography
-            variant="body2"
-            sx={{ color: "text.secondary", fontWeight: "bold" }}
-          >
-            Teléfono
-          </Typography>
-          <Typography variant="body2" sx={{ color: "text.secondary" }}>
-            {datos.telefono}
-          </Typography>
-        </Box>
-        <Box display="flex" justifyContent="space-between">
-          <Typography
-            variant="body2"
-            sx={{ color: "text.secondary", fontWeight: "bold" }}
-          >
-            Contraseña
-          </Typography>
-          <Typography variant="body2" sx={{ color: "text.secondary" }}>
-            {"*".repeat(datos.contraseña.length)}
-          </Typography>
-        </Box>
-      </CardContent>
-
-      {/* Dialog for Editing */}
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      height="50vh" // Full height of the viewport
+    >
+      <Card sx={{ width: "100%" }}>
+        <CardHeader
+          title="Datos Personales"
           sx={{
+            padding: 2,
             backgroundColor: "#1F2D40",
             color: "#fff",
-            marginBottom: 2,
+            fontWeight: "bold",
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+          action={
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "#fff",
+                color: "#000",
+                marginRight: 2,
+              }}
+              startIcon={<EditIcon />}
+              onClick={handleEditClick}
+            >
+              Editar Datos
+            </Button>
+          }
+        />
+        <Divider />
+        <CardContent
+          sx={{
+            padding: 2,
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
           }}
         >
-          Editar Datos
-        </DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="nombre"
-            label="Nombre"
-            type="text"
-            fullWidth
-            value={formData.nombre}
-            onChange={handleInputChange}
-          />
-          <TextField
-            margin="dense"
-            id="apellido"
-            label="Apellido Paterno"
-            type="text"
-            fullWidth
-            value={formData.apellido}
-            onChange={handleInputChange}
-          />
-          <TextField
-            margin="dense"
-            id="segundoApellido"
-            label="Apellido Materno"
-            type="text"
-            fullWidth
-            value={formData.segundoApellido}
-            onChange={handleInputChange}
-          />
-          <TextField
-            margin="dense"
-            id="correo"
-            label="Correo Electrónico"
-            type="email"
-            fullWidth
-            value={formData.correo}
-            onChange={handleInputChange}
-          />
-          <TextField
-            margin="dense"
-            id="telefono"
-            label="Teléfono"
-            type="text"
-            fullWidth
-            value={formData.telefono}
-            onChange={handleInputChange}
-          />
-          <TextField
-            margin="dense"
-            id="contraseña"
-            label="Contraseña"
-            type={showPassword ? "text" : "password"}
-            fullWidth
-            value={formData.contraseña}
-            onChange={handleInputChange}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    edge="end"
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={handleClose}
+          <Box display="flex" justifyContent="space-between">
+            <Typography
+              variant="body2"
+              sx={{ color: "text.secondary", fontWeight: "bold" }}
+            >
+              Nombre
+            </Typography>
+            <Typography variant="body2" sx={{ color: "text.secondary" }}>
+              {datos.nombre} {datos.apellido} {datos.segundoApellido}
+            </Typography>
+          </Box>
+          <Box display="flex" justifyContent="space-between">
+            <Typography
+              variant="body2"
+              sx={{ color: "text.secondary", fontWeight: "bold" }}
+            >
+              Correo Electrónico
+            </Typography>
+            <Typography variant="body2" sx={{ color: "text.secondary" }}>
+              {datos.correo}
+            </Typography>
+          </Box>
+          <Box display="flex" justifyContent="space-between">
+            <Typography
+              variant="body2"
+              sx={{ color: "text.secondary", fontWeight: "bold" }}
+            >
+              Teléfono
+            </Typography>
+            <Typography variant="body2" sx={{ color: "text.secondary" }}>
+              {datos.telefono}
+            </Typography>
+          </Box>
+          <Box display="flex" justifyContent="space-between">
+            <Typography
+              variant="body2"
+              sx={{ color: "text.secondary", fontWeight: "bold" }}
+            >
+              Contraseña
+            </Typography>
+            <Typography variant="body2" sx={{ color: "text.secondary" }}>
+              {"*".repeat(datos.contraseña.length)}
+            </Typography>
+          </Box>
+        </CardContent>
+
+        {/* Dialog for Editing */}
+        <Dialog open={open} onClose={handleClose}>
+          <DialogTitle
             sx={{
-              color: "#fff",
-              backgroundColor: "#ff0000",
-              "&:hover": {
-                backgroundColor: "#ff0000",
-              },
-            }}
-          >
-            Cancelar
-          </Button>
-          <Button
-            onClick={handleSave}
-            sx={{
-              color: "#fff",
               backgroundColor: "#1F2D40",
-              "&:hover": {
-                backgroundColor: "#1F2D40",
-              },
+              color: "#fff",
+              marginBottom: 2,
             }}
           >
-            Guardar
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Card>
+            Editar Datos
+          </DialogTitle>
+          <DialogContent>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="nombre"
+              label="Nombre"
+              type="text"
+              fullWidth
+              value={formData.nombre}
+              onChange={handleInputChange}
+            />
+            <TextField
+              margin="dense"
+              id="apellido"
+              label="Apellido Paterno"
+              type="text"
+              fullWidth
+              value={formData.apellido}
+              onChange={handleInputChange}
+            />
+            <TextField
+              margin="dense"
+              id="segundoApellido"
+              label="Apellido Materno"
+              type="text"
+              fullWidth
+              value={formData.segundoApellido}
+              onChange={handleInputChange}
+            />
+            <TextField
+              margin="dense"
+              id="correo"
+              label="Correo Electrónico"
+              type="email"
+              fullWidth
+              value={formData.correo}
+              onChange={handleInputChange}
+            />
+            <TextField
+              margin="dense"
+              id="telefono"
+              label="Teléfono"
+              type="text"
+              fullWidth
+              value={formData.telefono}
+              onChange={handleInputChange}
+            />
+            <TextField
+              margin="dense"
+              id="contraseña"
+              label="Contraseña"
+              type={showPassword ? "text" : "password"}
+              fullWidth
+              value={formData.contraseña}
+              onChange={handleInputChange}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={handleClose}
+              sx={{
+                color: "#fff",
+                backgroundColor: "#ff0000",
+                "&:hover": {
+                  backgroundColor: "#ff0000",
+                },
+              }}
+            >
+              Cancelar
+            </Button>
+            <Button
+              onClick={handleSave}
+              sx={{
+                color: "#fff",
+                backgroundColor: "#1F2D40",
+                "&:hover": {
+                  backgroundColor: "#1F2D40",
+                },
+              }}
+            >
+              Guardar
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Card>
+    </Box>
   );
 }

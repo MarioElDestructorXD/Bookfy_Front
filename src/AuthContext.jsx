@@ -2,17 +2,14 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 
-// Crear el contexto
 const AuthContext = createContext();
 
-// Proveedor de autenticación
 export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userRole, setUserRole] = useState('');
-  const url = 'https://hiusjw9flc.execute-api.us-east-1.amazonaws.com/Prod/'
+  const [userEmail, setUserEmail] = useState('');
+const url = 'https://q1pto6a9y2.execute-api.us-east-1.amazonaws.com/Prod/';
 
-
-  // Obtener el rol del usuario a partir del token
   const getUserRole = (accessToken) => {
     try {
       const decodedToken = jwtDecode(accessToken);
@@ -23,7 +20,16 @@ export function AuthProvider({ children }) {
     }
   };
 
-  // Función para manejar el inicio de sesión
+  const getUserEmail = (accessToken) => {
+    try {
+      const decodedToken = jwtDecode(accessToken);
+      return decodedToken.email || '';
+    } catch (error) {
+      console.error('Error al decodificar el token:', error);
+      return '';
+    }
+  };
+
   const login = async (email, password) => {
     try {
       const response = await axios.post(`${url}login`, { email, password }, {
@@ -39,7 +45,7 @@ export function AuthProvider({ children }) {
         localStorage.setItem('refresh_token', data.refresh_token);
         localStorage.setItem('role', data.role);
         setIsAuthenticated(true);
-        setUserRole(getUserRole(data.access_token)); // Actualiza el rol del usuario
+        setUserRole(getUserRole(data.access_token));
         return data;
       } else {
         console.error('Error en la respuesta del servidor');
@@ -49,7 +55,6 @@ export function AuthProvider({ children }) {
     }
   };
 
-  // Función para manejar el cierre de sesión
   const logout = () => {
     localStorage.removeItem('id_token');
     localStorage.removeItem('access_token');
@@ -59,12 +64,12 @@ export function AuthProvider({ children }) {
     setUserRole('');
   };
 
-  // Verificar autenticación en el inicio
   useEffect(() => {
     const accessToken = localStorage.getItem('access_token');
     if (accessToken) {
       setIsAuthenticated(true);
       setUserRole(getUserRole(accessToken));
+      setUserEmail(getUserEmail(accessToken)); 
     }
   }, []);
 
