@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Container,
   Typography,
@@ -27,36 +27,31 @@ import EditIcon from "@mui/icons-material/Edit";
 import userService from '../../shared/service/Users';
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import Load from '../../shared/plugins/Load'
-
+import Load from '../../shared/plugins/Load';
 
 const MySwal = withReactContent(Swal);
 
 export default function TablaUsuario() {
   const [loading, setLoading] = useState(true);
 
-  const [users, setUsers] = useState([
-    {
-      id_user: 1,
-      name: "John",
-      lastname: "Doe",
-      second_lastname: "Smith",
-      email: "john.doe@example.com",
-      phone: "1234567890",
-      id_rol: 1,
-      status: true,
-    },
-    {
-      id_user: 2,
-      name: "Jane",
-      lastname: "Roe",
-      second_lastname: "Johnson",
-      email: "jane.roe@example.com",
-      phone: "0987654321",
-      id_rol: 2,
-      status: false,
-    },
-  ]);
+  const [users, setUsers] = useState([]);
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const data = await userService.getAllUsers();
+        setUsers(data);
+        console.log('Datos obtenidos:', data); // Imprime los datos en la consola
+      } catch (error) {
+        console.error('Error al obtener usuarios:', error);
+        MySwal.fire({
+          title: 'Error',
+          text: 'No se pudieron obtener los usuarios.',
+          icon: 'error'
+        });
+      }
+    };
+    fetchUsers();
+  }, []);
 
   const [openAddDialog, setOpenAddDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);

@@ -3,8 +3,11 @@ import axios from "axios";
 const url = `https://4m6bq3th5d.execute-api.us-east-1.amazonaws.com/Prod/`;
 
 const getAllUsers = async () => {
+    const token = localStorage.getItem('access_token'); // Obtén el token del almacenamiento local
+    if (!token) {
+        throw new Error('Token de acceso no disponible');
+    }
     try {
-        const token = 'YOUR_AUTH_TOKEN';
         const response = await axios.get(`${url}getAll`, {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -25,7 +28,6 @@ const getAllUsers = async () => {
         throw error;
     }
 };
-
 
 const getUserById = async (id_user) => {
     try {
