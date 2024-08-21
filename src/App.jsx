@@ -13,6 +13,7 @@ import NotFound from "./pages/Errors/NotFound";
 import AdminRoute from "./Routers/AdminRoute";
 import ClientRoute from "./Routers/ClientRoute";
 import Unauthorized from "./pages/Errors/Unauthorized"; 
+import Catalogue from "./pages/Clients/Catalogue"
 import { useAuth } from './AuthContext';
 
 export default function App() {
@@ -38,6 +39,7 @@ export default function App() {
       <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/catalogue" element={<Catalogue />} />
           <Route path="/register" element={<Register />} />
           <Route path="/resetPassword" element={<ResetPassword />} />
           <Route path="/updatePassword" element={<UpdatePassword />} />

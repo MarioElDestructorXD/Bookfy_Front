@@ -1,9 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Button, Card, CardContent, CardMedia, Typography, Box, Chip, Divider } from "@mui/material";
+import {
+  Button,
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  Box,
+  Divider,
+} from "@mui/material";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import bookService from '../../shared/service/Book';
-import Load from '../../shared/plugins/Load';
+import bookService from "../../shared/service/Book";
+import Load from "../../shared/plugins/Load";
 import MoreBooks from "./MoreBooks";
 
 const MySwal = withReactContent(Swal);
@@ -19,10 +27,10 @@ export default function Catalogue() {
         if (response.data && Array.isArray(response.data)) {
           setBooks(response.data);
         } else {
-          console.error('Formato de datos inesperado:', response);
+          console.error("Formato de datos inesperado:", response);
         }
       } catch (error) {
-        console.error('Error al obtener los libros:', error);
+        console.error("Error al obtener los libros:", error);
       } finally {
         setLoading(false);
       }
@@ -33,55 +41,96 @@ export default function Catalogue() {
 
   if (loading) {
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
         <Load />
       </Box>
     );
   }
 
   const handlePreview = (book) => {
+    // Limitar la longitud de la descripción/sinopsis
+    const maxLength = 500;
+    const truncatedDescription =
+      book.description && book.description.length > maxLength
+        ? book.description.substring(0, maxLength) + "..."
+        : book.description;
+
     MySwal.fire({
       title: book.title,
+      width: "850px",
       html: (
-        <Box sx={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-          <Box sx={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+        <Box sx={{ display: "flex", gap: "30px" }}>
+          {/* Información del libro */}
+          <Box
+            sx={{
+              flex: 2,
+              display: "flex",
+              flexDirection: "column",
+              gap: "10px",
+            }}
+          >
+            <Typography variant="body1" sx={{ textAlign: "justify" }}>
+              {truncatedDescription || "No hay descripción disponible."}
+            </Typography>
+            <Typography variant="body2" sx={{ textAlign: "justify" }}>
+              <strong>Autor:</strong>{" "}
+              {book.authors ? book.authors.join(", ") : "Desconocido"}
+            </Typography>
+            <Typography variant="body2" sx={{ textAlign: "justify" }}>
+              <strong>Publicador:</strong> {book.publisher || "Desconocido"}
+            </Typography>
+            <Typography variant="body2" sx={{ textAlign: "justify" }}>
+              <strong>Año:</strong> {book.publishedDate || "Desconocido"}
+            </Typography>
           </Box>
-          <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-            <Typography variant="body1" align="center">
-              {book.description || "No hay descripción disponible."}
-            </Typography>
-            <Typography variant="body2" align="center">
-              <strong>Autor:</strong> {book.author || "Desconocido"}
-            </Typography>
-            <Typography variant="body2" align="center">
-              <strong>Año:</strong> {book.year || "Desconocido"}
-            </Typography>
-            <Box sx={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-              {book.image_url && (
-                <img src={book.image_url} alt={book.title} style={{ width: "100px", height: "150px" }} />
-              )}
+          {/* Imagen de la portada */}
+          {book.image_url && (
+            <Box
+              sx={{
+                flex: 1,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <img
+                src={book.image_url}
+                alt={book.title}
+                style={{ width: "200px", height: "300px", objectFit: "cover" }}
+              />
             </Box>
-          </Box>
+          )}
         </Box>
       ),
-      showCancelButton: true,
-      confirmButtonText: "Ver libro",
-      confirmButtonColor: '#17A2B8',
-      cancelButtonText: "Cerrar",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        window.open(book.pdf_url, "_blank");
-      }
+      scrollbarPadding: false,
     });
   };
 
   return (
     <>
       <Box sx={{ padding: "20px" }}>
-        <Typography variant="h4" component="h2" gutterBottom sx={{ color: '#17A2B8' }}>
+        <Typography
+          variant="h4"
+          component="h2"
+          gutterBottom
+          sx={{ color: "#17A2B8" }}
+        >
           Recién agregados
         </Typography>
-        <Divider sx={{ marginBottom: "20px", borderBottomWidth: 5, borderBottomColor: '#17A2B8' }} />
+        <Divider
+          sx={{
+            marginBottom: "20px",
+            borderBottomWidth: 5,
+            borderBottomColor: "#17A2B8",
+          }}
+        />
         <Box sx={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
           {books.map((book, index) => (
             <Box
@@ -97,28 +146,40 @@ export default function Catalogue() {
                   display: "flex",
                   flexDirection: "column",
                   height: "300px",
+                  boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)", // Sombra
+                  transition: "box-shadow 0.3s ease-in-out",
+                  "&:hover": {
+                    boxShadow: "0px 8px 40px rgba(0, 0, 0, 0.2)", // Sombra más intensa al pasar el mouse
+                  },
                 }}
+                onClick={() => handlePreview(book)}
               >
                 <CardMedia
                   component="img"
                   height="140"
-                  image={
-                    book.image_url
-                  }
+                  image={book.image_url}
                   alt={book.title}
                   sx={{ objectFit: "cover" }}
                 />
                 <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
+                  <Typography
+                    gutterBottom
+                    variant="h6" // Cambiado a h6 para aumentar el tamaño
+                    component="div"
+                    sx={{ fontWeight: "bold", }} // Negritas y alineación
+                  >
                     {book.title}
                   </Typography>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => handlePreview(book)}
-                  >
-                    Vista previa
-                  </Button>
+                  <Typography variant="body2" sx={{ textAlign: "justify" }}>
+                    <strong>Autor:</strong> {book.author || "Desconocido"}
+                  </Typography>
+                  <Typography variant="body2" sx={{ textAlign: "justify" }}>
+                    <strong>Publicador:</strong>{" "}
+                    {book.publisher || "Desconocido"}
+                  </Typography>
+                  <Typography variant="body2" sx={{ textAlign: "justify" }}>
+                    <strong>Año:</strong> {book.year || "Desconocido"}
+                  </Typography>
                 </CardContent>
               </Card>
             </Box>
@@ -129,4 +190,3 @@ export default function Catalogue() {
     </>
   );
 }
-
