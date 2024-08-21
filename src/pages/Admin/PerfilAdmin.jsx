@@ -23,7 +23,7 @@ import withReactContent from "sweetalert2-react-content";
 
 const MySwal = withReactContent(Swal);
 
-export default function Perfil() {
+export default function PerfilAdmin() {
   const [datos, setDatos] = useState({
     nombre: "Mario",
     apellido: "Rodriguez",
@@ -108,9 +108,10 @@ export default function Perfil() {
       display="flex"
       justifyContent="center"
       alignItems="center"
-      height="50vh" // Full height of the viewport
+      height="100vh" // Ocupa toda la altura disponible en el administrador
+      padding="20px" // Opcional: agrega padding alrededor del card
     >
-      <Card sx={{ width: "100%" }}>
+      <Card sx={{ width: "100%", maxWidth: "600px" }}>
         <CardHeader
           title="Datos Personales"
           sx={{
