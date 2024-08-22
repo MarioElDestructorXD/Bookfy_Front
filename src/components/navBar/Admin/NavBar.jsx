@@ -20,6 +20,8 @@ import { NavLink, useNavigate } from "react-router-dom";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useAuth } from "../../../AuthContext";
 import NavListDrawer from "./NavListDrawer";
+import Swal from "sweetalert2"; 
+
 
 export default function NavBar() {
   const [open, setOpen] = useState(false);
@@ -42,11 +44,18 @@ export default function NavBar() {
   };
 
   const handleLogout = () => {
-    logout(); 
-    navigate('/login'); 
+    Swal.fire({
+      title: "Cerrando sesión",
+      text: "Se está cerrando la sesión...",
+      icon: "info",
+      showConfirmButton: false, // Oculta el botón de confirmación
+      timer: 2000, // Cierra la alerta después de 2 segundos
+      didClose: () => {
+        logout(); 
+        navigate('/login'); 
+      }
+    });
   };
-
-
 
   return (
     <>
