@@ -115,12 +115,12 @@ const confirmPassword = async (email, confirmationCode, newPassword) => {
     }
 };
 
-export const changeTemporaryPassword = async (email, temporaryPassword, newPassword) => {
+export const changeTemporaryPassword = async (email, temporary_password, new_password) => {
     try {
         const response = await axios.post(`${url}change_temporary`, {
             email,
-            temporary_password: temporaryPassword,
-            new_password: newPassword
+            temporary_password: temporary_password,
+            new_password: new_password
         }, {
             headers: {
                 'Content-Type': 'application/json',

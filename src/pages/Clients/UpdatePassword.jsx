@@ -8,49 +8,35 @@ import {
   IconButton,
   InputAdornment,
   Typography,
-  Modal,
 } from "@mui/material";
 import {
   Visibility,
   VisibilityOff,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import CheckIcon from "../../assets/images/verify.gif"
 import authService from '../../shared/service/AuthContext'
 import Swal from "sweetalert2";
-
 
 export default function UpdatePassword() {
   const [passwords, setPasswords] = useState({
     email: "",
-    confirmationCode: "",
+    temporaryPassword: "", // Contraseña temporal
     newPassword: "",
-    repeatPassword: "",
   });
   const [showPasswords, setShowPasswords] = useState({
-    confirmationCode: false,
-    newPassword: false,
-    repeatPassword: false,
+    temporaryPassword: false, // Mostrar contraseña temporal
+    newPassword: false, // Mostrar nueva contraseña
   });
-  const [openModal, setOpenModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const { email, confirmationCode, newPassword, repeatPassword } = passwords;
-  
-    if (newPassword !== repeatPassword) {
-      Swal.fire({
-        icon: "warning",
-        text: "Las contraseñas nuevas no coinciden.",
-      });
-      return;
-    }
-  
+    const { email, temporaryPassword, newPassword } = passwords;
+
     setLoading(true);
     try {
-      const data = await authService.confirmPassword(email, confirmationCode, repeatPassword);
+      const data = await authService.confirmPassword(email, temporaryPassword, newPassword);
       console.log("Respuesta del servidor:", data);
       Swal.fire({
         position: "center",
@@ -74,7 +60,7 @@ export default function UpdatePassword() {
     } finally {
       setLoading(false);
     }
-  };  
+  };
 
   const handlePasswordChange = (prop) => (event) => {
     setPasswords({ ...passwords, [prop]: event.target.value });
@@ -131,22 +117,22 @@ export default function UpdatePassword() {
               margin="normal"
               required
               fullWidth
-              name="confirmationCode"
-              label="Código de Verificación"
-              type={showPasswords.confirmationCode ? "text" : "password"}
-              id="confirmationCode"
+              name="temporaryPassword"
+              label="Contraseña Temporal"
+              type={showPasswords.temporaryPassword ? "text" : "password"}
+              id="temporaryPassword"
               autoComplete="off"
-              value={passwords.confirmationCode}
-              onChange={handlePasswordChange("confirmationCode")}
+              value={passwords.temporaryPassword}
+              onChange={handlePasswordChange("temporaryPassword")}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
                     <IconButton
                       aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword("confirmationCode")}
+                      onClick={handleClickShowPassword("temporaryPassword")}
                       onMouseDown={handleMouseDownPassword}
                     >
-                      {showPasswords.confirmationCode ? (
+                      {showPasswords.temporaryPassword ? (
                         <VisibilityOff />
                       ) : (
                         <Visibility />
@@ -178,37 +164,6 @@ export default function UpdatePassword() {
                       onMouseDown={handleMouseDownPassword}
                     >
                       {showPasswords.newPassword ? (
-                        <VisibilityOff />
-                      ) : (
-                        <Visibility />
-                      )}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-              sx={{ mb: 3 }}
-            />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="repeatPassword"
-              label="Repetir Contraseña Nueva"
-              type={showPasswords.repeatPassword ? "text" : "password"}
-              id="repeatPassword"
-              autoComplete="new-password"
-              value={passwords.repeatPassword}
-              onChange={handlePasswordChange("repeatPassword")}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword("repeatPassword")}
-                      onMouseDown={handleMouseDownPassword}
-                    >
-                      {showPasswords.repeatPassword ? (
                         <VisibilityOff />
                       ) : (
                         <Visibility />

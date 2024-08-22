@@ -64,7 +64,6 @@ export default function Register() {
       const response = await authService.signUp(userDetails);
       Swal.fire({
         position: "center",
-        icon: "success",
         title: response.message,
         showConfirmButton: false,
         timer: 1500,
@@ -74,11 +73,11 @@ export default function Register() {
     } catch (error) {
       Swal.fire({
         position: "center",
-        icon: "error",
         title: "Error al registrar",
         text: error.message,
         showConfirmButton: true,
       });
+      console.error("Error detallado:", error.response || error.message);
     }
   };
 

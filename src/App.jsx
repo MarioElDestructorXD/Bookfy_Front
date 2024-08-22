@@ -25,6 +25,7 @@ export default function App() {
   const renderNavBar = () => {
     // Ocultar NavBar si la ruta actual es "/login", "/register", "/resetPassword", "/updatePassword" o "/changePassword"
     if (
+      location.pathname === '/' ||
       location.pathname === '/login' || 
       location.pathname === '/register' || 
       location.pathname === '/resetPassword' || 
