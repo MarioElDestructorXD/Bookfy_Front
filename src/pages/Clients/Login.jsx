@@ -81,7 +81,7 @@ export default function Login() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        marginTop: "8px",
+        marginTop: "50px",
       }}
     >
       <Container maxWidth="xs">
@@ -92,13 +92,14 @@ export default function Login() {
             flexDirection: "column",
             alignItems: "center",
             padding: "24px",
-            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.4)",
-            borderRadius: "2px",
+            boxShadow: "0px 16px 40px rgba(0, 0, 0, 0.4)",
+            borderRadius: "20px",
             backgroundColor: "white",
           }}
         >
           <Box sx={{ flexGrow: 1, display: "flex", alignItems: "center" }}>
             <img src={Logo} alt="Logo" style={{ height: "80px" }} />
+            <h1>BOOKIFY</h1>
           </Box>
           <form noValidate onSubmit={handleSubmit}>
             <TextField
