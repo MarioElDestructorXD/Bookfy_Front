@@ -13,16 +13,21 @@ import NotFound from "./pages/Errors/NotFound";
 import AdminRoute from "./Routers/AdminRoute";
 import ClientRoute from "./Routers/ClientRoute";
 import Unauthorized from "./pages/Errors/Unauthorized"; 
-import Catalogue from "./pages/Clients/Catalogue"
+import Catalogue from "./pages/Clients/Catalogue";
 import { useAuth } from './AuthContext';
 import ChancePassword from './pages/Clients/ChancePassword';
-
 
 export default function App() {
   const { isAuthenticated, userRole } = useAuth();
   const location = useLocation();
 
   const renderNavBar = () => {
+    // Ocultar NavBar si la ruta actual es "/login"
+    if (location.pathname === '/login') {
+      return null;
+    }
+
+    // Mostrar NavBar basado en la autenticación y rol de usuario
     if (isAuthenticated) {
       if (userRole === 'Admins') {
         return <AdminNavBar />;
@@ -37,7 +42,7 @@ export default function App() {
     <>
       {renderNavBar()}
       <Container>
-      <Routes>
+        <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/catalogue" element={<Catalogue />} />
