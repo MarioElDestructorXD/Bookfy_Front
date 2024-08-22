@@ -15,7 +15,7 @@ import Logo from "../../assets/images/user.png";
 import Swal from 'sweetalert2';
 import { jwtDecode } from 'jwt-decode';
 import { useAuth } from '../../AuthContext'
-
+import { Link } from 'react-router-dom';
 export default function Login() {
 
   const navigate = useNavigate();
@@ -98,8 +98,10 @@ export default function Login() {
           }}
         >
           <Box sx={{ flexGrow: 1, display: "flex", alignItems: "center" }}>
-            <img src={Logo} alt="Logo" style={{ height: "80px" }} />
-            <h1>BOOKIFY</h1>
+            <Link to="/catalogue" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+              <img src={Logo} alt="Logo" style={{ height: "80px" }} />
+              <h1 style={{ marginLeft: '10px' }}>BOOKIFY</h1>
+           </Link>
           </Box>
           <form noValidate onSubmit={handleSubmit}>
             <TextField

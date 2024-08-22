@@ -28,6 +28,7 @@ export default function App() {
       location.pathname === '/' ||
       location.pathname === '/login' || 
       location.pathname === '/register' || 
+      location.pathname === '/catalogue' || 
       location.pathname === '/resetPassword' || 
       location.pathname === '/updatePassword' || 
       location.pathname === '/changePassword'

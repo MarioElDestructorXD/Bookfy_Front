@@ -37,7 +37,7 @@ export default function Register() {
 
     if (!validateRequiredFields()) {
       Swal.fire({
-        icon: 'error',
+        icon: 'info',
         title: 'Error',
         text: 'Todos los campos son obligatorios, excepto el segundo apellido',
       });

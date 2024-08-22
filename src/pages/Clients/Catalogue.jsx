@@ -8,6 +8,7 @@ import {
   Box,
   Divider,
 } from "@mui/material";
+import { Link } from 'react-router-dom'; // Importación del componente Link
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import bookService from "../../shared/service/Book";
@@ -55,7 +56,6 @@ export default function Catalogue() {
   }
 
   const handlePreview = (book) => {
-    // Limitar la longitud de la descripción/sinopsis
     const maxLength = 500;
     const truncatedDescription =
       book.description && book.description.length > maxLength
@@ -64,10 +64,9 @@ export default function Catalogue() {
 
     MySwal.fire({
       title: book.title,
-      width: "850px",
+      width: "600px",
       html: (
         <Box sx={{ display: "flex", gap: "30px" }}>
-          {/* Información del libro */}
           <Box
             sx={{
               flex: 2,
@@ -90,7 +89,6 @@ export default function Catalogue() {
               <strong>Año:</strong> {book.publishedDate || "Desconocido"}
             </Typography>
           </Box>
-          {/* Imagen de la portada */}
           {book.image_url && (
             <Box
               sx={{
@@ -122,7 +120,7 @@ export default function Catalogue() {
           gutterBottom
           sx={{ color: "#17A2B8" }}
         >
-          Recién agregados
+          
         </Typography>
         <Divider
           sx={{
@@ -146,10 +144,10 @@ export default function Catalogue() {
                   display: "flex",
                   flexDirection: "column",
                   height: "300px",
-                  boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)", // Sombra
+                  boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)", 
                   transition: "box-shadow 0.3s ease-in-out",
                   "&:hover": {
-                    boxShadow: "0px 8px 40px rgba(0, 0, 0, 0.2)", // Sombra más intensa al pasar el mouse
+                    boxShadow: "0px 8px 40px rgba(0, 0, 0, 0.2)", 
                   },
                 }}
                 onClick={() => handlePreview(book)}
@@ -164,9 +162,9 @@ export default function Catalogue() {
                 <CardContent>
                   <Typography
                     gutterBottom
-                    variant="h6" // Cambiado a h6 para aumentar el tamaño
+                    variant="h6" 
                     component="div"
-                    sx={{ fontWeight: "bold", }} // Negritas y alineación
+                    sx={{ fontWeight: "bold", }}
                   >
                     {book.title}
                   </Typography>
@@ -186,6 +184,14 @@ export default function Catalogue() {
           ))}
         </Box>
       </Box>
+
+      {/* Botón para regresar a la vista de inicio de sesión */}
+      <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+        <Button variant="contained" color="primary" component={Link} to="/">
+          Volver al Login
+        </Button>
+      </Box>
+
       <MoreBooks />
     </>
   );

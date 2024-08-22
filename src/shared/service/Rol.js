@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const url = `https://9iqsbtipt6.execute-api.us-east-1.amazonaws.com/Prod/`;
+const url = `https://pryo3jvlxl.execute-api.us-east-1.amazonaws.com/Prod/`;
 
 const getRoles = async () => {
     try {

@@ -53,7 +53,6 @@ export default function MiBiblioteca() {
           </Grid>
         ))}
       </Grid>
-      {/* Button to add a new book (for demonstration) */}
       <Button
         variant="contained"
         color="primary"
