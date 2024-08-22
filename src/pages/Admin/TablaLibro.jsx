@@ -37,8 +37,8 @@ const TablaLibros = () => {
     description: '',
     synopsis: '',
     status: true,
-    image: '', // Para almacenar la imagen en base64
-    pdf: '', // Para almacenar el PDF en base64
+    image: '',
+    pdf: '', 
   });
 
   const fetchBooks = async () => {

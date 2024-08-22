@@ -23,10 +23,13 @@ import withReactContent from "sweetalert2-react-content";
 import { jwtDecode } from 'jwt-decode';
 import authService from '../../shared/service/AuthContext';
 import userService from '../../shared/service/Users';
+import Load from '../../shared/plugins/Load'
+
 
 const MySwal = withReactContent(Swal);
 
 export default function PerfilAdmin() {
+    const [loading, setLoading] = useState(true);
     const [datos, setDatos] = useState({
         id_user: "",
         name: "",
@@ -76,9 +79,11 @@ export default function PerfilAdmin() {
                     phone: userData.phone,
                     id_rol: userData.id_rol,
                 });
-            } catch (error) {
+                setLoading(false); // Stop loading once data is fetched
+              } catch (error) {
                 console.error('Error al obtener el perfil del usuario:', error);
-            }
+                setLoading(false); // Stop loading if there's an error
+              }
         };
 
         fetchUserProfile();
@@ -93,7 +98,6 @@ export default function PerfilAdmin() {
     };
 
     const handleSave = async () => {
-        // Cierra el modal y muestra el SweetAlert
         setOpen(false);
 
         const result = await MySwal.fire({
@@ -109,14 +113,12 @@ export default function PerfilAdmin() {
 
         if (result.isConfirmed) {
             try {
-                // Actualiza los datos con los valores editados
                 const updatedUser = {
                     id_user: datos.id_user,
                     ...formData,
                 };
                 await userService.updateUser(updatedUser);
 
-                // Actualiza el estado de datos con los nuevos valores
                 setDatos({
                     ...datos,
                     ...formData,
@@ -150,6 +152,14 @@ export default function PerfilAdmin() {
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
     };
+
+    if (loading) {
+        return (
+          <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+            <Load />
+          </Box>
+        );
+      }
 
     return (
         <Box

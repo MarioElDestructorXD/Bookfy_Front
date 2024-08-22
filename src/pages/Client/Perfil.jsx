@@ -22,10 +22,13 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { jwtDecode } from 'jwt-decode';
 import authService from '../../shared/service/AuthContext';
+import userService from '../../shared/service/Users';
+import Load from '../../shared/plugins/Load'
 
 const MySwal = withReactContent(Swal);
 
 export default function Perfil() {
+  const [loading, setLoading] = useState(true);
   const [datos, setDatos] = useState({
     id_user: "",
     name: "",
@@ -44,7 +47,6 @@ export default function Perfil() {
     email: "",
     phone: "",
     id_rol: "",
-    password: "",
   });
 
   const [open, setOpen] = useState(false);
@@ -53,30 +55,33 @@ export default function Perfil() {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const accessToken = localStorage.getItem('access_token');
-        if (accessToken) {
-          const decodedToken = jwtDecode(accessToken);
-          const email = decodedToken.email;
-          if (email) {
-            const userData = await getUserByEmail(email);
-            setDatos(userData);
-            setFormData({
-              name: userData.name,
-              lastname: userData.lastname,
-              second_lastname: userData.second_lastname,
-              email: userData.email,
-              phone: userData.phone,
-              id_rol: userData.id_rol,
-              password: "", // Contraseña no se debe mostrar ni actualizar directamente
-            });
-          } else {
-            console.error('No se pudo obtener el correo electrónico del token.');
-          }
-        } else {
-          console.error('No hay token de acceso disponible.');
+        const token = localStorage.getItem('id_token');
+        if (!token) {
+          console.error('Token de acceso no disponible.');
+          return;
         }
+
+        const decodedToken = jwtDecode(token);
+        const email = decodedToken.email;
+        if (!email) {
+          console.error('No se pudo obtener el correo electrónico del token.');
+          return;
+        }
+
+        const userData = await authService.getUserByEmail(email);
+        setDatos(userData);
+        setFormData({
+          name: userData.name,
+          lastname: userData.lastname,
+          second_lastname: userData.second_lastname,
+          email: userData.email,
+          phone: userData.phone,
+          id_rol: userData.id_rol,
+        });
+        setLoading(false); // Stop loading once data is fetched
       } catch (error) {
         console.error('Error al obtener el perfil del usuario:', error);
+        setLoading(false); // Stop loading if there's an error
       }
     };
 
@@ -92,7 +97,6 @@ export default function Perfil() {
   };
 
   const handleSave = async () => {
-    // Cierra el modal y muestra el SweetAlert
     setOpen(false);
 
     const result = await MySwal.fire({
@@ -107,25 +111,32 @@ export default function Perfil() {
     });
 
     if (result.isConfirmed) {
-      // Actualiza los datos con los valores editados
-      setDatos({
-        ...datos,
-        name: formData.name,
-        lastname: formData.lastname,
-        second_lastname: formData.second_lastname,
-        email: formData.email,
-        phone: formData.phone,
-        id_rol: formData.id_rol,
-        // No se actualiza el campo 'status'
-      });
+      try {
+        const updatedUser = {
+          id_user: datos.id_user,
+          ...formData,
+        };
+        await userService.updateUser(updatedUser);
 
-      // Muestra un mensaje de éxito
-      MySwal.fire({
-        title: "Guardado",
-        text: "Los datos han sido actualizados",
-        icon: "success",
-        confirmButtonColor: "#1F2D40",
-      });
+        setDatos({
+          ...datos,
+          ...formData,
+        });
+
+        MySwal.fire({
+          title: "Guardado",
+          text: "Los datos han sido actualizados",
+          icon: "success",
+          confirmButtonColor: "#1F2D40",
+        });
+      } catch (error) {
+        MySwal.fire({
+          title: "Error",
+          text: "No se pudieron guardar los cambios.",
+          icon: "error",
+          confirmButtonColor: "#1F2D40",
+        });
+      }
     }
   };
 
@@ -139,6 +150,15 @@ export default function Perfil() {
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
+
+  if (loading) {
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+        <Load />
+      </Box>
+    );
+  }
+
 
   return (
     <Box
@@ -223,7 +243,7 @@ export default function Perfil() {
               Rol
             </Typography>
             <Typography variant="body2" sx={{ color: "text.secondary" }}>
-              {datos.id_rol}
+              Cliente
             </Typography>
           </Box>
         </CardContent>
@@ -319,28 +339,10 @@ export default function Perfil() {
             />
           </DialogContent>
           <DialogActions>
-            <Button
-              onClick={handleClose}
-              sx={{
-                color: "#fff",
-                backgroundColor: "#ff0000",
-                "&:hover": {
-                  backgroundColor: "#ff0000",
-                },
-              }}
-            >
+            <Button onClick={handleClose} color="primary">
               Cancelar
             </Button>
-            <Button
-              onClick={handleSave}
-              sx={{
-                color: "#fff",
-                backgroundColor: "#1F2D40",
-                "&:hover": {
-                  backgroundColor: "#1F2D40",
-                },
-              }}
-            >
+            <Button onClick={handleSave} color="primary">
               Guardar
             </Button>
           </DialogActions>

@@ -142,10 +142,21 @@ export default function HomeUser() {
   return (
     <Box sx={{ maxWidth: "auto", flexGrow: 1, mx: "auto", mt: 4 }}>
       <SwiperView />
-      <Typography variant="h5" fontWeight="bold" sx={{ mt: 4 }}>
-        Acción
-      </Typography>
-      <Divider orientation="horizontal" flexItem />
+      <Typography
+          variant="h5"
+          component="h2"
+          gutterBottom
+          sx={{ color: "#17A2B8" }}
+        >
+          Recién agregados
+        </Typography>
+        <Divider
+          sx={{
+            marginBottom: "20px",
+            borderBottomWidth: 5,
+            borderBottomColor: "#17A2B8",
+          }}
+        />
       <Grid container spacing={2} sx={{ mt: 2, mb: 2 }}>
         {books.map((book) => (
           <Grid item xs={12} sm={6} md={4} key={book.id_book}>

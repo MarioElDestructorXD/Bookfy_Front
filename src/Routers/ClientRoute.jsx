@@ -19,6 +19,7 @@ export default function ClientRoute() {
                 <Route path="search" element={<Search />} />
                 <Route path="reading" element={<Reading />} />
                 <Route path="profile" element={<Perfil />} />
+                <Route path="/" element={<Perfil />} />
                 <Route path="/500" element={<ServerError />} />
                 <Route path="/unauthorized" element={<Unauthorized />} />
                 <Route path="/*" element={<NotFound />} />

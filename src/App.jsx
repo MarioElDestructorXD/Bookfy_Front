@@ -16,6 +16,7 @@ import Unauthorized from "./pages/Errors/Unauthorized";
 import Catalogue from "./pages/Clients/Catalogue"
 import { useAuth } from './AuthContext';
 import ChancePassword from './pages/Clients/ChancePassword';
+import ProtectedRoute from './Routers/ProtectedRoute';
 
 
 export default function App() {
@@ -37,7 +38,7 @@ export default function App() {
     <>
       {renderNavBar()}
       <Container>
-      <Routes>
+        <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/catalogue" element={<Catalogue />} />
@@ -45,8 +46,27 @@ export default function App() {
           <Route path="/resetPassword" element={<ResetPassword />} />
           <Route path="/updatePassword" element={<UpdatePassword />} />
           <Route path="/changePassword" element={<ChancePassword />} />
-          <Route path="/admin/*" element={<AdminRoute />} />
-          <Route path="/client/*" element={<ClientRoute />} />
+
+          {/* Rutas protegidas para administradores */}
+          <Route
+            path="/admin/*"
+            element={
+              <ProtectedRoute roles={['Admins']}>
+                <AdminRoute />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Rutas protegidas para clientes */}
+          <Route
+            path="/client/*"
+            element={
+              <ProtectedRoute roles={['Clients']}>
+                <ClientRoute />
+              </ProtectedRoute>
+            }
+          />
+
           <Route path="/500" element={<ServerError />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
           <Route path="/*" element={<NotFound />} />
