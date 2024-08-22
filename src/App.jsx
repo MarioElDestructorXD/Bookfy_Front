@@ -23,11 +23,17 @@ export default function App() {
   const location = useLocation();
 
   const renderNavBar = () => {
-    // Ocultar NavBar si la ruta actual es "/login"
-    if (location.pathname === '/login') {
+    // Ocultar NavBar si la ruta actual es "/login", "/register", "/resetPassword", "/updatePassword" o "/changePassword"
+    if (
+      location.pathname === '/login' || 
+      location.pathname === '/register' || 
+      location.pathname === '/resetPassword' || 
+      location.pathname === '/updatePassword' || 
+      location.pathname === '/changePassword'
+    ) {
       return null;
     }
-
+  
     // Mostrar NavBar basado en la autenticación y rol de usuario
     if (isAuthenticated) {
       if (userRole === 'Admins') {

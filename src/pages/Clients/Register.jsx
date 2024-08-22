@@ -97,6 +97,7 @@ export default function Register() {
           backgroundColor: "white",
           maxWidth: 550,
           width: "100%",
+          marginTop: '50px',
         }}
       >
         <Box sx={{ flexGrow: 1, alignItems: "center" }}>
@@ -172,16 +173,22 @@ export default function Register() {
             mt: 2,
           }}
         >
-          <TextField
-            id="phone"
-            label="Teléfono"
-            type="tel"
-            variant="outlined"
-            fullWidth
-            required
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-          />
+     <TextField
+  id="phone"
+  label="Teléfono"
+  type="tel"
+  variant="outlined"
+  fullWidth
+  required
+  value={phone}
+  onChange={(e) => {
+    const input = e.target.value;
+    // Permitir solo números y un máximo de 10 caracteres
+    if (/^\d{0,10}$/.test(input)) {
+      setPhone(input);
+    }
+  }}
+/>
         </Box>
         <Button
           type="submit"

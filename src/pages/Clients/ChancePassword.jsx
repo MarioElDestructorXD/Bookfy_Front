@@ -91,7 +91,7 @@ export default function ChancePassword() {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                marginTop: 4,
+                marginTop: '50px',
                 padding: "24px",
                 boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.4)",
                 borderRadius: "2px",

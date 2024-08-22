@@ -57,7 +57,7 @@ export default function ResetPassword() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        marginTop: "8px",
+        marginTop: "120px",
       }}
     >
       <Container maxWidth="xs">

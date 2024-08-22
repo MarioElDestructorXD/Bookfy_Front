@@ -94,7 +94,7 @@ export default function UpdatePassword() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        marginTop: "8px",
+        marginTop: "80px",
       }}
     >
       <Container maxWidth="xs">
