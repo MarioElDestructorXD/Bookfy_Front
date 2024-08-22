@@ -1,19 +1,11 @@
-import {
-  Button,
-  TextField,
-  IconButton,
-  InputAdornment,
-  Box,
-} from "@mui/material";
+import { Button, TextField, Box } from "@mui/material";
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 import Swal from "sweetalert2";
-import authService from '../../shared/service/AuthContext'
+import authService from "../../shared/service/AuthContext";
 import Logo from "../../assets/images/user.png";
 
 export default function Register() {
-  
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -37,9 +29,9 @@ export default function Register() {
 
     if (!validateRequiredFields()) {
       Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Todos los campos son obligatorios, excepto el segundo apellido',
+        icon: "error",
+        title: "Error",
+        text: "Todos los campos son obligatorios, excepto el segundo apellido",
       });
       return;
     }
@@ -57,24 +49,27 @@ export default function Register() {
       second_lastname: secondLastname,
       phone_number: phone,
       id_rol: 2,
-      status: true
+      status: true,
     };
 
     try {
       const response = await authService.signUp(userDetails);
       Swal.fire({
         position: "center",
-        title: response.message,
+        icon: "success",
+        title: "Registro exitoso",
+        text: response.message || "Te has registrado correctamente.",
         showConfirmButton: false,
-        timer: 1500,
+        timer: 2000, // Aumenta el timer para asegurarte de que el then se ejecute
       }).then(() => {
         navigate("/login");
       });
     } catch (error) {
       Swal.fire({
         position: "center",
+        icon: "error",
         title: "Error al registrar",
-        text: error.message,
+        text: error.message || "Ocurrió un error al registrar el usuario.",
         showConfirmButton: true,
       });
       console.error("Error detallado:", error.response || error.message);
@@ -96,7 +91,7 @@ export default function Register() {
           backgroundColor: "white",
           maxWidth: 550,
           width: "100%",
-          marginTop: '50px',
+          marginTop: "50px",
         }}
       >
         <Box sx={{ flexGrow: 1, alignItems: "center" }}>
@@ -146,7 +141,6 @@ export default function Register() {
             type="text"
             variant="outlined"
             fullWidth
-            required
             value={secondLastname}
             onChange={(e) => setSecondLastname(e.target.value)}
           />
@@ -172,22 +166,22 @@ export default function Register() {
             mt: 2,
           }}
         >
-     <TextField
-  id="phone"
-  label="Teléfono"
-  type="tel"
-  variant="outlined"
-  fullWidth
-  required
-  value={phone}
-  onChange={(e) => {
-    const input = e.target.value;
-    // Permitir solo números y un máximo de 10 caracteres
-    if (/^\d{0,10}$/.test(input)) {
-      setPhone(input);
-    }
-  }}
-/>
+          <TextField
+            id="phone"
+            label="Teléfono"
+            type="tel"
+            variant="outlined"
+            fullWidth
+            required
+            value={phone}
+            onChange={(e) => {
+              const input = e.target.value;
+              // Permitir solo números y un máximo de 10 caracteres
+              if (/^\d{0,10}$/.test(input)) {
+                setPhone(input);
+              }
+            }}
+          />
         </Box>
         <Button
           type="submit"
