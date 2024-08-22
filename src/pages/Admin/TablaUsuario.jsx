@@ -297,7 +297,7 @@ export default function TablaUsuario() {
                         <EditIcon />
                       </IconButton>
                       <IconButton onClick={() => handleDeleteUser(user.id_user)}>
-                        <DeleteIcon />
+                        {/* <DeleteIcon /> */}
                       </IconButton>
                     </TableCell>
                   </TableRow>

@@ -9,6 +9,8 @@ import {
     Box,
     Typography,
     Input,
+    useMediaQuery,
+    useTheme,
 } from "@mui/material";
 
 const ModalEditarLibro = ({ open, onClose, onSubmit, bookToEdit }) => {
@@ -21,6 +23,9 @@ const ModalEditarLibro = ({ open, onClose, onSubmit, bookToEdit }) => {
     const [status, setStatus] = useState(true);
     const [coverImage, setCoverImage] = useState(null);
     const [pdfFile, setPdfFile] = useState(null);
+
+    const theme = useTheme();
+    const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
     useEffect(() => {
         if (bookToEdit) {
@@ -64,7 +69,7 @@ const ModalEditarLibro = ({ open, onClose, onSubmit, bookToEdit }) => {
     };
 
     return (
-        <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
+        <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm" fullScreen={fullScreen}>
             <DialogTitle>Editar Libro</DialogTitle>
             <DialogContent>
                 <TextField
