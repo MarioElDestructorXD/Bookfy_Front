@@ -66,14 +66,14 @@ export default function SwiperView() {
               sx={{ fontSize: 41, fontWeight: 300 , color: '#F05600' }}
               data-swiper-parallax="-300"
             >
-              Slide 1
+              BIENVENIDO
             </Box>
             <Box
               className="subtitle"
               sx={{ fontSize: 21 , color: '#FFC107'}}
               data-swiper-parallax="-200"
             >
-              Subtitle
+              ¡Feliz lectura!
             </Box>
             <Box
               className="text"
@@ -81,12 +81,7 @@ export default function SwiperView() {
               data-swiper-parallax="-100"
             >
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-                dictum mattis velit, sit amet faucibus felis iaculis nec. Nulla
-                laoreet justo vitae porttitor porttitor. Suspendisse in sem
-                justo. Integer laoreet magna nec elit suscipit, ac laoreet nibh
-                euismod. Aliquam hendrerit lorem at elit facilisis rutrum. Ut at
-                ullamcorper velit. Nulla ligula nisi, imperdiet ut lacinia nec,
+              Nos alegra que te unas a nuestra comunidad de lectores y amantes de los libros. Aquí podrás explorar una vasta colección de libros, desde los clásicos hasta las últimas novedades, todo al alcance de un clic.
                 tincidunt ut libero. Aenean feugiat non eros quis feugiat.
               </p>
             </Box>
@@ -102,15 +97,14 @@ export default function SwiperView() {
               className="title"
               sx={{ fontSize: 41, fontWeight: 300 , color: '#F05600' }}
               data-swiper-parallax="-300"
-            >
-              Slide 1
+            > BIENVENIDO
             </Box>
             <Box
               className="subtitle"
               sx={{ fontSize: 21 , color: '#FFC107'}}
               data-swiper-parallax="-200"
             >
-              Subtitle
+              ¡Feliz lectura!
             </Box>
             <Box
               className="text"
@@ -118,12 +112,7 @@ export default function SwiperView() {
               data-swiper-parallax="-100"
             >
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-                dictum mattis velit, sit amet faucibus felis iaculis nec. Nulla
-                laoreet justo vitae porttitor porttitor. Suspendisse in sem
-                justo. Integer laoreet magna nec elit suscipit, ac laoreet nibh
-                euismod. Aliquam hendrerit lorem at elit facilisis rutrum. Ut at
-                ullamcorper velit. Nulla ligula nisi, imperdiet ut lacinia nec,
+              Nos alegra que te unas a nuestra comunidad de lectores y amantes de los libros. Aquí podrás explorar una vasta colección de libros, desde los clásicos hasta las últimas novedades, todo al alcance de un clic.
                 tincidunt ut libero. Aenean feugiat non eros quis feugiat.
               </p>
             </Box>
@@ -140,14 +129,14 @@ export default function SwiperView() {
               sx={{ fontSize: 41, fontWeight: 300 , color: '#F05600' }}
               data-swiper-parallax="-300"
             >
-              Slide 1
+              BIENVENIDO
             </Box>
             <Box
               className="subtitle"
               sx={{ fontSize: 21 , color: '#FFC107'}}
               data-swiper-parallax="-200"
             >
-              Subtitle
+              ¡Feliz lectura!
             </Box>
             <Box
               className="text"
@@ -155,12 +144,7 @@ export default function SwiperView() {
               data-swiper-parallax="-100"
             >
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-                dictum mattis velit, sit amet faucibus felis iaculis nec. Nulla
-                laoreet justo vitae porttitor porttitor. Suspendisse in sem
-                justo. Integer laoreet magna nec elit suscipit, ac laoreet nibh
-                euismod. Aliquam hendrerit lorem at elit facilisis rutrum. Ut at
-                ullamcorper velit. Nulla ligula nisi, imperdiet ut lacinia nec,
+              Nos alegra que te unas a nuestra comunidad de lectores y amantes de los libros. Aquí podrás explorar una vasta colección de libros, desde los clásicos hasta las últimas novedades, todo al alcance de un clic.
                 tincidunt ut libero. Aenean feugiat non eros quis feugiat.
               </p>
             </Box>

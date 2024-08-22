@@ -18,18 +18,21 @@ import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import { NavLink, useNavigate } from "react-router-dom";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-
+import { useAuth } from "../../../AuthContext";
 import NavListDrawer from "./NavListDrawer";
+import Swal from "sweetalert2"; 
+
 
 export default function NavBar() {
   const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
+  const { logout } = useAuth(); 
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    navigate(`/search?q=${searchQuery}`);
+    navigate(`/search?q=${searchQuery}`); 
   };
 
   const handleMenuOpen = (event) => {
@@ -41,9 +44,17 @@ export default function NavBar() {
   };
 
   const handleLogout = () => {
-    // Lógica para cerrar sesión
-    handleMenuClose();
-    navigate("/login");
+    Swal.fire({
+      title: "Cerrando sesión",
+      text: "Se está cerrando la sesión...",
+      icon: "info",
+      showConfirmButton: false, // Oculta el botón de confirmación
+      timer: 2000, // Cierra la alerta después de 2 segundos
+      didClose: () => {
+        logout(); 
+        navigate('/login'); 
+      }
+    });
   };
 
   return (
@@ -66,7 +77,6 @@ export default function NavBar() {
               <Button
                 color="inherit"
                 component={NavLink}
-                to="/"
                 sx={{
                   mr: 2,
                   display: "flex",
@@ -91,7 +101,7 @@ export default function NavBar() {
               }}
             >
               <NavLink
-                to="admin/tablaUsuario"
+                to="admin/dataUsers"
                 style={({ isActive }) => ({
                   marginRight: "16px",
                   display: "flex",
@@ -110,7 +120,7 @@ export default function NavBar() {
                 </Typography>
               </NavLink>
               <NavLink
-                to="admin/tablaLibro"
+                to="admin/dataBooks"
                 style={({ isActive }) => ({
                   marginRight: "16px",
                   display: "flex",
@@ -126,6 +136,25 @@ export default function NavBar() {
                   sx={{ cursor: "pointer", textAlign: "center" }}
                 >
                   Libros
+                </Typography>
+              </NavLink>
+              <NavLink
+                to="admin/profile"
+                style={({ isActive }) => ({
+                  marginRight: "16px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  textDecoration: "none",
+                  borderBottom: isActive ? "4px solid" : "none",
+                  color: "inherit",
+                })}
+              >
+                <Typography
+                  variant="h7"
+                  sx={{ cursor: "pointer", textAlign: "center" }}
+                >
+                  Perfil
                 </Typography>
               </NavLink>
             </Box>
@@ -164,7 +193,7 @@ export default function NavBar() {
           >
             <CardContent>
               <Typography variant="h5" color="textPrimary" fontWeight="bold">
-                BOOKFY
+                BOOKIFY
               </Typography>
             </CardContent>
           </Card>

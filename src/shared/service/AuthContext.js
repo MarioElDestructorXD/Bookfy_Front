@@ -1,5 +1,5 @@
 import axios from "axios";
-const url = 'https://hiusjw9flc.execute-api.us-east-1.amazonaws.com/Prod/'
+const url = 'https://y3b8muy0l2.execute-api.us-east-1.amazonaws.com/Prod/'
 
 const signUp = async (userDetails) => {
     try {
@@ -20,6 +20,26 @@ const signUp = async (userDetails) => {
         }
     } catch (error) {
         console.error('Error al registrar el usuario:', error.message);
+        throw error;
+    }
+};
+
+const getUserByEmail = async (email) => {
+    try {
+        const response = await axios.get(`${url}myProfile`, {
+            params: { email: email },
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+        if (response.status === 200) {
+            return response.data;
+        } else {
+            throw new Error('Error al obtener la respuesta del servidor');
+        }
+    } catch (error) {
+        console.error('Error al obtener el usuario:', error.message);
         throw error;
     }
 };
@@ -95,12 +115,37 @@ const confirmPassword = async (email, confirmationCode, newPassword) => {
     }
 };
 
+export const changeTemporaryPassword = async (email, temporary_password, new_password) => {
+    try {
+        const response = await axios.post(`${url}change_temporary`, {
+            email,
+            temporary_password: temporary_password,
+            new_password: new_password
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        return response.data; 
+    } catch (error) {
+        if (error.response) {
+            console.error('Error en la respuesta:', error.response.data);
+        } else if (error.request) {
+            console.error('Error en la solicitud:', error.request);
+        } else {
+            console.error('Error:', error.message);
+        }
+        throw error; 
+    }
+};
 
 
 export default {
     signUp,
     login,
     forgotPassword,
-    confirmPassword
+    confirmPassword,
+    changeTemporaryPassword,
+    getUserByEmail
 }
 

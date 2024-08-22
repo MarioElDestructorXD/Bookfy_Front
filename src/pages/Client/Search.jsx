@@ -101,7 +101,7 @@ export default function SearchComponent() {
 
   const showAlert = (book) => {
     Swal.fire({
-      width: "80%",
+      width: "50%",
       html: `
         <div style="display: flex; align-items: center;">
           <img src="${book.thumbnail}" alt="${book.title}" style="width: 200px; height: 300px; margin-right: 20px;" />
@@ -114,11 +114,7 @@ export default function SearchComponent() {
       showConfirmButton: true,
       confirmButtonText: "Leer",
       confirmButtonColor: '#6A4000',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        navigate(`/reading`); // Redirige a la ruta /reading
-      }
-    });
+    })
   };
 
   if (loading) {

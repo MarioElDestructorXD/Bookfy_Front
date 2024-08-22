@@ -18,19 +18,17 @@ import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import { NavLink, useNavigate } from "react-router-dom";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-
+import { useAuth } from "../../../AuthContext";
 import NavListDrawer from "./NavListDrawer";
+import Swal from "sweetalert2"; 
+
 
 export default function NavBar() {
   const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
-
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    navigate(`/search?q=${searchQuery}`);
-  };
+  const { logout } = useAuth();  
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -41,13 +39,19 @@ export default function NavBar() {
   };
 
   const handleLogout = () => {
-    // Lógica para cerrar sesión
-    localStorage.removeItem("token"); // Eliminar token
-    localStorage.removeItem("role"); // Eliminar rol (si lo tienes)
-    handleMenuClose();
-    navigate("/login");
-    window.location.reload(); // Recargar la página para asegurarse de que el estado de autenticación se actualice
+    Swal.fire({
+      title: "Cerrando sesión",
+      text: "Se está cerrando la sesión...",
+      icon: "info",
+      showConfirmButton: false, // Oculta el botón de confirmación
+      timer: 2000, // Cierra la alerta después de 2 segundos
+      didClose: () => {
+        logout(); 
+        navigate('/login'); 
+      }
+    });
   };
+
 
   return (
     <>
@@ -69,7 +73,6 @@ export default function NavBar() {
               <Button
                 color="inherit"
                 component={NavLink}
-                to="/"
                 sx={{
                   mr: 2,
                   display: "flex",
@@ -109,7 +112,7 @@ export default function NavBar() {
                   variant="h7"
                   sx={{ cursor: "pointer", textAlign: "center" }}
                 >
-                  Mi Biblioteca
+                  Biblioteca
                 </Typography>
               </NavLink>
               <NavLink
@@ -132,7 +135,7 @@ export default function NavBar() {
                 </Typography>
               </NavLink>
               <NavLink
-                to="client/perfil"
+                to="client/profile"
                 style={({ isActive }) => ({
                   marginRight: "16px",
                   display: "flex",

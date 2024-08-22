@@ -64,7 +64,6 @@ export default function Register() {
       const response = await authService.signUp(userDetails);
       Swal.fire({
         position: "center",
-        icon: "success",
         title: response.message,
         showConfirmButton: false,
         timer: 1500,
@@ -74,11 +73,11 @@ export default function Register() {
     } catch (error) {
       Swal.fire({
         position: "center",
-        icon: "error",
         title: "Error al registrar",
         text: error.message,
         showConfirmButton: true,
       });
+      console.error("Error detallado:", error.response || error.message);
     }
   };
 
@@ -97,6 +96,7 @@ export default function Register() {
           backgroundColor: "white",
           maxWidth: 550,
           width: "100%",
+          marginTop: '50px',
         }}
       >
         <Box sx={{ flexGrow: 1, alignItems: "center" }}>
@@ -172,16 +172,22 @@ export default function Register() {
             mt: 2,
           }}
         >
-          <TextField
-            id="phone"
-            label="Teléfono"
-            type="tel"
-            variant="outlined"
-            fullWidth
-            required
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-          />
+     <TextField
+  id="phone"
+  label="Teléfono"
+  type="tel"
+  variant="outlined"
+  fullWidth
+  required
+  value={phone}
+  onChange={(e) => {
+    const input = e.target.value;
+    // Permitir solo números y un máximo de 10 caracteres
+    if (/^\d{0,10}$/.test(input)) {
+      setPhone(input);
+    }
+  }}
+/>
         </Box>
         <Button
           type="submit"
