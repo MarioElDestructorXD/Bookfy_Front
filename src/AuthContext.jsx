@@ -8,7 +8,7 @@ export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userRole, setUserRole] = useState('');
   const [userEmail, setUserEmail] = useState('');
-  const url = 'https://y3b8muy0l2.execute-api.us-east-1.amazonaws.com/Prod/';
+  const url = 'https://sekcrptqwd.execute-api.us-east-1.amazonaws.com/Prod/';
 
   const getUserRole = (accessToken) => {
     try {

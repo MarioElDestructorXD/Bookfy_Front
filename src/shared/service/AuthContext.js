@@ -1,5 +1,5 @@
 import axios from "axios";
-const url = 'https://y3b8muy0l2.execute-api.us-east-1.amazonaws.com/Prod/'
+const url = 'https://sekcrptqwd.execute-api.us-east-1.amazonaws.com/Prod/'
 
 const signUp = async (userDetails) => {
     try {

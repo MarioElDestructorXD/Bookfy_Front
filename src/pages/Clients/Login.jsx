@@ -182,6 +182,16 @@ export default function Login() {
                 Cambiar contraseña temporal
               </NavLink>
             </Box>
+            <Box
+              sx={{
+                mt: 1,
+                textAlign: "center",
+              }}
+            >
+              <NavLink to="/updatePassword" variant="body2">
+                Codigo de Verificacion (contraseña olvidada)
+              </NavLink>
+            </Box>
           </form>
         </Box>
       </Container>
